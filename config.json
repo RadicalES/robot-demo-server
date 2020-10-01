@@ -1,0 +1,21 @@
+{
+    "server" : {
+        "ipAddress" : "192.168.60.118",
+        "port"  : 8087
+    },
+    "robots" : [ 
+        {
+            "tagName" : "Weighbridge 1A",
+            "macAddress" : "00:60:35:17:82:D5",
+            "message" : "SOLAS Scale Ready!",
+            "config" : { 
+                "lowLimit" : "850.0",
+                "highLimit" : "1100.0",
+                "security" : "OPEN",
+                "units" : "kg",
+                "serverURL" : "http://192.168.60.109:8087/scale.cgi"
+            }
+        }
+    ],
+    "pallets" : ["10001", "10002", "10003", "10004"]
+}

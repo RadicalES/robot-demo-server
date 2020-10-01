@@ -1,0 +1,116 @@
+{
+
+    "requestInformation" : {
+        "MAC" : "AA:BB:CC:00:11:22:"
+    },
+
+    "responseInformation" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "hardware" : "1a",
+        "software" : "1.0.1",
+        "type"     : "ROBOT-T201",
+        "uptime"   : "1000"
+    },
+
+    "requestReset" : {
+        "MAC" : "AA:BB:CC:00:11:22:33"
+    },
+    
+    "requestPing" : {
+        "MAC" : "AA:BB:CC:00:11:22"
+    },
+
+    "responsePong" : {
+        "MAC" : "AA:BB:CC:00:11:22"
+    },
+
+    "requestDateTime" : {
+        "MAC"  : "AA:BB:CC:00:11:22",
+    },
+
+    "responseDateTime" : {
+        "status" : "OK/FAIL/ERROR",
+        "MAC" : "AA:BB:CC:00:11:22",
+        "date" : "yyyy-mm-dd",
+        "time" : "12:00:00"
+    },
+
+    "requestStatus" : {
+        "MAC" : "AA:BB:CC:00:11:22"
+    },
+
+    "publishStatus" : {
+        "status" : "READY/!READY",
+        "message" : "SCALE OFFLINE",
+        "MAC" : "AABBCC00112233"
+    },
+    
+    "publishScaleWeight" : {
+        "MAC" : "AABBCC00112233",
+        "id" : "0123456789abcdef",
+        "barcode" : "0123456789abcdef",
+        "weight" : "1100.00",
+        "units" : "kg/NOT-SET",
+        "status" : "NORMAL/OVERRIDE/UNDER/OVER"
+    },
+
+    "requestSetup" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "type" : "SOLAS-Scale",
+        "status" : "REQUEST/ACCEPT"
+    },
+
+    "responseSetup" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "lowLimit" : "850",
+        "highLimit" : "1150",
+        "units" : "kg",
+        "name" : "Weighbridge 1",
+        "security" : "OPEN/REQUIRED",
+        "date" : "yyyy-mm-dd",
+        "time" : "12:00:00",
+        "serverURL" : "http://192.168.0.1/scale.cgi"
+    },
+
+    "publishLogon" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef"
+    },
+
+    "publishLogoff" : {
+        "MAC" : "AA:BB:CC:00:11:22"
+    },
+
+    "publishButton" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "value" : "B1/B2/B3/B4/B5/B6"
+    },
+
+    "responseStation" : {
+        "LCD1" : "Palet OK",
+        "LCD2" : "#1001010",
+        "LCD3" : "Weight:",
+        "LCD4" : "1000.0 kg",
+        "Green" : "true/false",
+        "Orange" : "true/false",
+        "Red" : "true/false"
+    },
+
+    "responseUser" : {
+        "LCD1" : "Palet OK",
+        "LCD2" : "#1001010",
+        "LCD3" : "Weight:",
+        "LCD4" : "1000.0 kg",
+        "Green" : "true/false",
+        "Orange" : "true/false",
+        "Red" : "true/false"
+    },
+
+    "payloadType" : {
+        "propertyName" : "propertyValue",
+        "subObject" : {
+            "subProperyName" : "subPropertyValue"
+        }
+    }
+}
