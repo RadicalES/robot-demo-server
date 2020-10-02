@@ -1,6 +1,6 @@
 {
     "server" : {
-        "ipAddress" : "192.168.60.118",
+        "ipAddress" : "192.168.1.20",
         "port"  : 8087
     },
     "robots" : [ 
@@ -13,7 +13,19 @@
                 "highLimit" : "1100.0",
                 "security" : "OPEN",
                 "units" : "kg",
-                "serverURL" : "http://192.168.60.109:8087/scale.cgi"
+                "serverURL" : "http://192.168.1.2:8087/scale.cgi"
+            }
+        },
+        {
+            "tagName" : "Weighbridge 1A",
+            "macAddress" : "00:60:35:29:A8:98",
+            "message" : "DIPAR Scale Ready!",
+            "config" : { 
+                "lowLimit" : "850.0",
+                "highLimit" : "1100.0",
+                "security" : "OPEN",
+                "units" : "kg",
+                "serverURL" : "http://192.168.1.2:8087/scale.cgi"
             }
         }
     ],
