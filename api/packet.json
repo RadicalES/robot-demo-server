@@ -1,7 +1,7 @@
-/* Robot T200/T400 JSON API             */
-/* (C) 2020, Radical Electronic Systems */
-/* Revision 1B                          */
 {
+    "__doc__" : "Robot T200/T400 JSON API",
+    "__copy__": "(C) 2020, Radical Electronic Systems",
+    "__revision__" : "Revision 1B",
 
     "requestInformation" : {
         "MAC" : "AA:BB:CC:00:11:22:"
