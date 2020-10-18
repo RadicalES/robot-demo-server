@@ -1,6 +1,6 @@
 {
     "server" : {
-        "ipAddress" : "192.168.1.20",
+        "ipAddress" : "192.168.1.2",
         "port"  : 8087
     },
     "robots" : [ 
@@ -8,6 +8,7 @@
             "tagName" : "Weighbridge 1A",
             "macAddress" : "00:60:35:17:82:D5",
             "message" : "SOLAS Scale Ready!",
+            "type" : "SOLAS-SCALE",
             "config" : { 
                 "lowLimit" : "850.0",
                 "highLimit" : "1100.0",
@@ -17,15 +18,59 @@
             }
         },
         {
+            "tagName" : "Terminal A",
+            "macAddress" : "00:60:35:17:82:D5",
+            "message" : "User Terminal Ready!",
+            "type" : "TERMINAL",
+            "config" : { 
+                "security" : "OPEN",
+                "units" : "kg",
+                "serverURL" : "http://192.168.1.2:8087/term.cgi"
+            }
+        },
+        {
+            "tagName" : "Scanner Station 3C",
+            "macAddress" : "00:60:35:17:82:D5",
+            "message" : "Barcode Scanner Ready!",
+            "type" : "BARCODE-SCANNER",
+            "config" : { 
+                "security" : "OPEN",
+                "units" : "kg",
+                "serverURL" : "http://192.168.1.2:8087/scan.cgi"
+            }
+        },
+        {
+            "tagName" : "BIN Tip Station 3C",
+            "macAddress" : "00:60:35:17:82:D5",
+            "message" : "NoSoft BIN Tipper!",
+            "type" : "BIN-TIPPING",
+            "config" : { 
+                "security" : "OPEN",
+                "serverURL" : "http://192.168.1.2:8087/scan.cgi"
+            }
+        },
+        {
             "tagName" : "Weighbridge 1A",
             "macAddress" : "00:60:35:29:A8:98",
             "message" : "DIPAR Scale Ready!",
+            "type" : "SOLAS-SCALE",
             "config" : { 
                 "lowLimit" : "850.0",
                 "highLimit" : "1100.0",
                 "security" : "OPEN",
                 "units" : "kg",
                 "serverURL" : "http://192.168.1.2:8087/scale.cgi"
+            }
+        },
+        {
+            "tagName" : "Auto Station 1A",
+            "macAddress" : "00:60:35:17:82:D5",
+            "message" : "Auto station ready!",
+            "type" : "AUTO",
+            "config" : { 
+                "security" : "OPEN",
+                "type" : "BIN-TIPPING",
+                "serverURL" : "http://192.168.1.2:8087/scan.cgi"
             }
         }
     ],

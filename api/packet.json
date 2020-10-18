@@ -1,3 +1,6 @@
+/* Robot T200/T400 JSON API             */
+/* (C) 2020, Radical Electronic Systems */
+/* Revision 1B                          */
 {
 
     "requestInformation" : {
@@ -13,7 +16,7 @@
     },
 
     "requestReset" : {
-        "MAC" : "AA:BB:CC:00:11:22:33"
+        "MAC" : "AA:BB:CC:00:11:22"
     },
     
     "requestPing" : {
@@ -25,7 +28,7 @@
     },
 
     "requestDateTime" : {
-        "MAC"  : "AA:BB:CC:00:11:22",
+        "MAC"  : "AA:BB:CC:00:11:22"
     },
 
     "responseDateTime" : {
@@ -41,17 +44,20 @@
 
     "publishStatus" : {
         "status" : "READY/!READY",
-        "message" : "SCALE OFFLINE",
-        "MAC" : "AABBCC00112233"
+        "system" : "ENGINE/SCALE/SCANNER",
+        "message" : "Descriptive message when in error",
+        "MAC" : "AA:BB:CC:00:11:22",
+        "session" : "0123456789abcdef"
     },
     
     "publishScaleWeight" : {
-        "MAC" : "AABBCC00112233",
+        "MAC" : "AA:BB:CC:00:11:22",
         "id" : "0123456789abcdef",
         "barcode" : "0123456789abcdef",
         "weight" : "1100.00",
         "units" : "kg/NOT-SET",
-        "status" : "NORMAL/OVERRIDE/UNDER/OVER"
+        "status" : "NORMAL/OVERRIDE/UNDER/OVER",
+        "session" : "0123456789abcdef"
     },
 
     "requestSetup" : {
@@ -69,26 +75,30 @@
         "security" : "OPEN/REQUIRED",
         "date" : "yyyy-mm-dd",
         "time" : "12:00:00",
+        "type" : "TERMINAL/SOLAS-SCALE/BARCODE-SCANNER/BIN-TIPPING",
         "serverURL" : "http://192.168.0.1/scale.cgi"
     },
 
     "publishLogon" : {
         "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef"
+        "id" : "0123456789abcdef",
+        "session" : "0123456789abcdef"
     },
 
     "publishLogoff" : {
-        "MAC" : "AA:BB:CC:00:11:22"
+        "MAC" : "AA:BB:CC:00:11:22",
+        "session" : "0123456789abcdef"
     },
 
     "publishButton" : {
         "MAC" : "AA:BB:CC:00:11:22",
         "id" : "0123456789abcdef",
-        "value" : "B1/B2/B3/B4/B5/B6"
+        "value" : "B1/B2/B3/B4/B5/B6",
+        "session" : "0123456789abcdef"
     },
 
     "responseStation" : {
-        "LCD1" : "Palet OK",
+        "LCD1" : "Pallet OK",
         "LCD2" : "#1001010",
         "LCD3" : "Weight:",
         "LCD4" : "1000.0 kg",
@@ -98,10 +108,20 @@
     },
 
     "responseUser" : {
-        "LCD1" : "Palet OK",
+        "LCD1" : "Pallet OK",
         "LCD2" : "#1001010",
         "LCD3" : "Weight:",
         "LCD4" : "1000.0 kg",
+        "Green" : "true/false",
+        "Orange" : "true/false",
+        "Red" : "true/false"
+    },
+
+    "responseKeypad" : {
+        "LCD1" : "Enter password",
+        "LCD2" : "Press enter",
+        "LCD3" : "",
+        "LCD4" : "",
         "Green" : "true/false",
         "Orange" : "true/false",
         "Red" : "true/false"

@@ -2,6 +2,7 @@
 
 const moment = require('moment-timezone');
 const config = require('../config.json');
+const { v4: uuidv4 } = require('uuid');
 const robot = require('./robot');
 const pallet = require('./pallet');
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
@@ -35,6 +36,18 @@ class RobotServer {
     for(let c in config.robots) {
       let r = config.robots[c];
       if(r.macAddress == macAddress) {
+        return r;
+      }
+    }
+
+    return null;
+  }
+
+  findConfigByMacAddressAndType(macAddress, type) {
+
+    for(let c in config.robots) {
+      let r = config.robots[c];
+      if((r.macAddress == macAddress) && (r.type == type)) {
         return r;
       }
     }
@@ -77,6 +90,10 @@ class RobotServer {
 
     console.log("ROBOT SERVER: cannot find: " + macAddress);
     return null;
+  }
+
+  getNewSession() {
+    return uuidv4();
   }
 
   logWeight(barcode, userid, status, weight) {
