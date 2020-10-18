@@ -111,16 +111,19 @@ module.exports = {
   
   /* Last handler, we cannot service this Robot, tell it to reset itself */
   error(req, res) {
+    const hdr = req.headers;
     
-    // command not supported, send reset
-    ress = {
-      requestReset : {
-        MAC : "00:00:00:00:00:00"
-      },
-    }
+    if((req.method == "POST") && (hdr['user-agent'] === 'Robot-T201')) {
 
-    console.log("ERROR RESPONSE: ", ress);
-    res.status(200).json(ress);
+      // command not supported, send reset
+      ress = {
+        requestReset : {
+          MAC : "00:00:00:00:00:00"
+        },
+      }
+      console.log("ERROR RESPONSE: ", ress);
+      res.status(200).json(ress);
+    }    
   },
 
   /* Simulate a scanner application handler */
