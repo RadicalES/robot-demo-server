@@ -130,6 +130,94 @@ module.exports = {
   scan(req, res, next) {
     let msg = req.body;
     let ress = {status : "FAIL"}
+    let rbt = null;
+
+    // service a button
+    if("publishButton" in msg) {
+      const obj = msg["publishButton"];
+      const barcode = obj.barcode;
+      const id = obj.id;
+      const btn = obj.button;
+      let lg = "false";
+      let lo = "false";
+      let lr = "false";
+      mac = obj.MAC;
+      rbt = robotserver.getRobot(mac);
+
+      if(btn == "B1") {
+        lr = "true"
+      }
+      else if(btn == "B2") {
+        lo = "true"
+      }
+      else if(btn == "B3") {
+        lg = "true"
+      }
+      else if(btn == "B4") {
+        lg = "true"
+        lr = "true"
+      }
+      else if(btn == "B5") {
+        lg = "true"
+        lo = "true"
+      }
+      
+      if(rbt) {
+        data = {
+          MAC : mac,
+          LCD1 : "Button Pressed",
+          LCD2 : btn,
+          LCD3 : "Success",
+          LCD4 : "",
+          green : lg,
+          orange : lo,
+          red : lr
+        }
+          
+        ress = {
+          responseStation : data,
+        }
+      }      
+    }
+    // service a scan
+    else if("publishBarcodeScan" in msg) {
+      const obj = msg["publishBarcodeScan"];
+      const barcode = obj.barcode;
+      const id = obj.id;
+      let lg = "false";
+      let lo = "false";
+      let lr = "false";
+      mac = obj.MAC;
+      rbt = robotserver.getRobot(mac);
+
+      if(rbt) {
+        data = {
+          MAC : mac,
+          LCD1 : "Barcode Scan OK",
+          LCD2 : "",
+          LCD3 : "Success",
+          LCD4 : "Scan Next",
+          green : lg,
+          orange : lo,
+          red : lr
+        }
+          
+        ress = {
+          responseStation : data,
+        }
+      }      
+    }
+    else {
+      return next();
+    }   
+  
+    // if robot not found, let the error handler service it
+    if(!rbt) {
+      console.log("TERM: Robot not found: " + mac);
+      return next();
+    }
+
+
     console.log("SCALE RESP: ", ress);
     res.status(200).json(ress);
   },
@@ -289,8 +377,8 @@ module.exports = {
       if(btn == "B1") {
         if((rbt) && (plt)) {
 
-          const w = parseFloat(p.getWeight());
-          robotserver.logWeight(barcode, id, p.getStatus(), p.getWeight());
+          const w = parseFloat(plt.getWeight());
+          robotserver.logWeight(barcode, id, plt.getStatus(), plt.getWeight());
 
           if(w < 900) {
             lr = "true"
