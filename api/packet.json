@@ -1,7 +1,7 @@
 {
     "__doc__" : "Robot T200/T400 JSON API",
-    "__copy__": "(C) 2020, Radical Electronic Systems",
-    "__revision__" : "Revision 1B",
+    "__copy__": "(C) 2022, Radical Electronic Systems",
+    "__revision__" : "Revision 1E",
 
     "requestInformation" : {
         "MAC" : "AA:BB:CC:00:11:22:"
@@ -60,6 +60,14 @@
         "session" : "0123456789abcdef"
     },
 
+    "publishBarcodeScan" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "barcode" : "0123456789abcdef",
+        "session" : "0123456789abcdef",
+        "status" : "NORMAL/ENTERED"
+    },
+
     "requestSetup" : {
         "MAC" : "AA:BB:CC:00:11:22",
         "type" : "SOLAS-Scale",
@@ -102,9 +110,9 @@
         "LCD2" : "#1001010",
         "LCD3" : "Weight:",
         "LCD4" : "1000.0 kg",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
+        "green" : "true/false",
+        "orange" : "true/false",
+        "red" : "true/false"
     },
 
     "responseUser" : {
@@ -112,9 +120,9 @@
         "LCD2" : "#1001010",
         "LCD3" : "Weight:",
         "LCD4" : "1000.0 kg",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
+        "green" : "true/false",
+        "orange" : "true/false",
+        "red" : "true/false"
     },
 
     "responseKeypad" : {
@@ -122,9 +130,26 @@
         "LCD2" : "Press enter",
         "LCD3" : "",
         "LCD4" : "",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
+        "green" : "true/false",
+        "orange" : "true/false",
+        "red" : "true/false"
+    },
+
+    "requestPalletMove" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "session" : "0123456789abcdef",
+        "barcode" : "palletBarcode",
+        "location" : "locationBarcode"
+    },
+
+    "requestPalletStore" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "session" : "0123456789abcdef",
+        "barcode" : "palletBarcode",
+        "location" : "locationBarcode", 
+        "destination" : "destinationBarcode"
     },
 
     "payloadType" : {

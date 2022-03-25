@@ -15,9 +15,11 @@
     "cors": "^2.8.5",
     "csv-writer": "^1.6.0",
     "express": "^4.17.1",
+    "express-simulate-latency": "github:j-/express-simulate-latency",
     "moment": "^2.29.0",
     "moment-timezone": "^0.5.31",
     "morgan": "^1.10.0",
-    "uuid": "^8.3.1"
+    "uuid": "^8.3.1",
+    "xml": "^1.0.1"
   }
 }

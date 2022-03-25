@@ -13,33 +13,15 @@ module.exports = (app, config) => {
   app.post('/setup.cgi', router.base, router.setup);
   app.post('/scale.cgi', router.base, router.scale);
   app.post('/term.cgi', router.base, router.term);
-  app.post('/scan.cgi', router.base, router.scan);  
+  app.post('/scan.cgi', router.base, router.scan);
+  app.post('/forklift.cgi', router.base, router.forklift);
+  
+  app.get('/term.cgi/:command?', router.baseGet, router.termGet);
+  app.get('/scan.cgi/:command?', router.baseGet, router.scanGet);
+  app.get('/setup.cgi/:command?', router.baseGet, router.setupGet);
+  app.get('/scale.cgi/:command?', router.baseGet, router.scaleGet);
+  app.get('/scaleJMT.cgi', router.scaleJMTGet);
+
   app.use(router.error);
-
-  //for /index page
-  //app.get('/', function(request,response){
-   // response.sendFile('index.html',{root:path.join(__dirname,'./views')});
-  //});
-
-  //for /home page
- // app.get('/home', function(request,response){
-  //  response.sendFile('home.html',{root:path.join(__dirname,'./views')});
-  //});
-
-  //for /about page
-  //app.get('/about', function(request,response){
-    //response.sendFile('about.html',{root:path.join(__dirname,'./views')});
-  //});
-
-  //for /contact page
-  //app.get('/contact', function(request,response){
-   // response.sendFile('contact.html',{root:path.join(__dirname,'./views')});
-  //});
-
- // app.listen(3000,function(){
-   // console.log('Listening at port 3000...');
-  //});
-
-  //app.use('/assets',express.static(__dirname + '/assets'));
 
 };
