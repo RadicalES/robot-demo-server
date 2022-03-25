@@ -3,8 +3,10 @@
 const moment = require('moment-timezone');
 const config = require('../config.json');
 const { v4: uuidv4 } = require('uuid');
-const robot = require('./robot');
-const pallet = require('./pallet');
+const Robot = require('./robot');
+const Pallet = require('./pallet');
+const Location = require('./location');
+
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const csvWriter = createCsvWriter({
   path: 'solas.csv',
@@ -20,76 +22,47 @@ const csvWriter = createCsvWriter({
 class RobotServer {
 
   constructor() {  
-    this.robots = [];
-    this.pallets = [];
-
-    for(let c in config.pallets) {
-      const b = config.pallets[c];
-      let p = new pallet(b, 0.0);
-      this.pallets.push(p);
-    }
-
+    this.RobotList = [];
+    this.PalletList = config.pallets.map((p) => new Pallet(p, 0.0));
+    this.LocationList = config.locations.map((l) => new Location(l.tagName, l.barcode, 0));
   }
 
   findConfigByMacAddress(macAddress) {
-
-    for(let c in config.robots) {
-      let r = config.robots[c];
-      if(r.macAddress == macAddress) {
-        return r;
-      }
-    }
-
-    return null;
+    return config.robots.find((r) => r.macAddress === macAddress);
   }
 
   findConfigByMacAddressAndType(macAddress, type) {
-
-    for(let c in config.robots) {
-      let r = config.robots[c];
-      if((r.macAddress == macAddress) && (r.type == type)) {
-        return r;
-      }
-    }
-
-    return null;
+    return config.robots.find((r) => r.macAddress === macAddress && r.type === type)
   }
 
   findPallet(barcode) {
+    return robotserver.PalletList.find((p) => p.getBarcode() === barcode );
+  }
 
-    for(let c in robotserver.pallets) {
-      let p = robotserver.pallets[c];
-      if(p.getBarcode() == barcode) {
-        return p;
-      }
+  findLocation(barcode) {
+    return robotserver.LocationList.find((l) => l.getBarcode() === barcode );
+  }
+
+  movePallet(pallet, location) {
+    if(location.getPallet() == null) {
+      location.setPallet(pallet);
     }
-
-    return null;
   }
 
   addPallet(barcode) {
-    let p = new pallet(barcode, 0.0);
+    let p = new Pallet(barcode, 0.0);
     this.pallets.push(p);
     return p;
   }
 
   addRobot(macAddress, config, url) {
-    let r = new robot(macAddress, config, url);
-    robotserver.robots.push(r);
+    let r = new Robot(macAddress, config, url);
+    robotserver.RobotList.push(r);
     return r;
   }
 
   getRobot(macAddress) {
-    
-    for(let c in robotserver.robots) {
-      let r = robotserver.robots[c];
-      if(r.getMacAddress() == macAddress) {
-        return r;
-      }
-    }
-
-    console.log("ROBOT SERVER: cannot find: " + macAddress);
-    return null;
+    return robotserver.RobotList.find((r) => r.getMacAddress() === macAddress );
   }
 
   getNewSession() {

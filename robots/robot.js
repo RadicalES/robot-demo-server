@@ -1,5 +1,6 @@
-
 /* (C) 2020 Radical Electronic Systems CC */
+
+const FORKLIFT_STATES = require("./forkliftstates")
 
 class Robot {
 
@@ -9,6 +10,8 @@ class Robot {
         this.Url = url;    
         this.Status = "OFFLINE";
         this.Session = null;
+        this.ForkLiftState = FORKLIFT_STATES.LOAD_SCAN_PALLET;
+        this.Pallet = null;
     }
 
     setOnline(session) {
@@ -29,6 +32,22 @@ class Robot {
 
     getSession() {
         return this.Session;
+    }
+
+    getForkliftState() {
+        return this.ForkLiftState;
+    }
+
+    setForkliftState(state) {
+        this.ForkLiftState = state;
+    }
+
+    getPallet() {
+        return this.Pallet;
+    }
+
+    setPallet(pallet) {
+        this.Pallet = pallet;
     }
 
 }

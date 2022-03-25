@@ -3,6 +3,7 @@
 
 const robotserver = require("./robotserver")
 const xml = require('xml');
+const FORKLIFT_STATES = require("./forkliftstates")
 
 module.exports = {
 
@@ -222,6 +223,256 @@ module.exports = {
     console.log("SCAN RESP: ", ress);
     res.status(200).json(ress);
   },
+
+  /* Simulate manual forklift transactions */
+  forkliftServerState(req, res, next) {
+    let msg = req.body;
+    let ress = {status : "FAIL"}
+    let rbt = null;
+
+    // service a button
+    if("publishButton" in msg) {
+      const obj = msg["publishButton"];
+      const barcode = obj.barcode;
+      const id = obj.id;
+      const btn = obj.button;
+      let lg = "false";
+      let lo = "false";
+      let lr = "false";
+      mac = obj.MAC;
+      rbt = robotserver.getRobot(mac);
+
+      if(rbt) {
+        if(btn == "B1") {
+          rbt.setForkliftState(FORKLIFT_STATES.LOAD_SCAN_PALLET);
+        }
+        else if(btn == "B2") {
+          lo = "true"
+        }
+
+        data = {
+          MAC : mac,
+          LCD1 : "Forklift Empty",
+          LCD2 : "Please scan a pallet",
+          LCD3 : "",
+          LCD4 : "",
+          green : lg,
+          orange : lo,
+          red : lr
+        }
+          
+        ress = {
+          responseStation : data,
+        }
+      }      
+    }
+    // service a scan
+    else if("publishBarcodeScan" in msg) {
+      const obj = msg["publishBarcodeScan"];
+      const barcode = obj.barcode;
+      const id = obj.id;
+      let lg = "false";
+      let lo = "false";
+      let lr = "false";
+      mac = obj.MAC;
+      rbt = robotserver.getRobot(mac);
+
+      if(rbt) {
+
+        const state = rbt.getForkliftState();
+
+        data = {
+          MAC : mac,
+          LCD1 : "Error state",
+          LCD2 : "Reset Robot",
+          LCD3 : "",
+          LCD4 : "",
+          green : lg,
+          orange : lo,
+          red : lr
+        }
+
+        if(state === FORKLIFT_STATES.LOAD_SCAN_PALLET) {
+
+          const pal = robotserver.findPallet(barcode);
+
+          if(pal) {
+            lg = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Please Scan location",
+              LCD2 : "",
+              LCD3 : "",
+              LCD4 : "Press [1] to Reset",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+
+            rbt.setPallet(pal);
+            rbt.setForkliftState(FORKLIFT_STATES.LOAD_SCAN_LOCATION);
+          }
+          else {
+            lr = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Pallet does not exist",
+              LCD2 : "Please scan again",
+              LCD3 : "",
+              LCD4 : "",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+          }
+        }
+        else if(state === FORKLIFT_STATES.LOAD_SCAN_LOCATION) {
+
+          const pal = rbt.getPallet();
+          const loc = robotserver.findLocation(barcode);
+
+          if(loc) {
+            lg = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Forklift Loaded!",
+              LCD2 : "Pallet: " + pal.getBarcode(),
+              LCD3 : "Location: " + loc.TagName,
+              LCD4 : "Press [1] to Reset",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+
+            rbt.setForkliftState(FORKLIFT_STATES.TRANSIT);
+          }
+          else {
+            lr = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Location not found!",
+              LCD2 : "Please scan again",
+              LCD3 : "",
+              LCD4 : "Press [1] to Reset",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+          }
+
+        }
+        else if(state === FORKLIFT_STATES.TRANSIT) {
+
+          const pal = rbt.getPallet();
+
+          if(pal) {
+
+            if(pal.getBarcode() === barcode) {
+              lg = "true"
+              data = {
+                MAC : mac,
+                LCD1 : "Scan destination",
+                LCD2 : "Pallet: " + pal.getBarcode(),
+                LCD3 : "",
+                LCD4 : "Press [1] to Reset",
+                green : lg,
+                orange : lo,
+                red : lr
+              }
+
+              rbt.setForkliftState(FORKLIFT_STATES.UNLOAD_SCANNED_PALLET);
+            }
+            else {
+              lo = "true"
+
+              data = {
+                MAC : mac,
+                LCD1 : "Pallet barcode do not match",
+                LCD2 : "Scan Pallet barcode again",
+                LCD3 : "",
+                LCD4 : "Press [1] to Reset",
+                green : lg,
+                orange : lo,
+                red : lr
+              }
+            }
+          }
+          else {
+            lr = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Pallet not found!",
+              LCD2 : "Please scan again",
+              LCD3 : "",
+              LCD4 : "Press [1] to Reset",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+          }
+
+        }
+        else if(state === FORKLIFT_STATES.UNLOAD_SCANNED_PALLET) {
+
+          const pal = rbt.getPallet();
+          const loc = robotserver.findLocation(barcode);
+
+          console
+
+          if(loc) {
+
+            lg = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Pallet stored!",
+              LCD2 : "Ready for next pallet",
+              LCD3 : "",
+              LCD4 : "",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+
+            rbt.setForkliftState(FORKLIFT_STATES.LOAD_SCAN_PALLET);
+          }
+          else {
+            lr = "true"
+            data = {
+              MAC : mac,
+              LCD1 : "Location not found!",
+              LCD2 : "Please scan again",
+              LCD3 : "",
+              LCD4 : "[1] to Reset",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+          }
+
+        }
+
+       
+          
+        ress = {
+          responseStation : data,
+        }
+      }      
+    }
+    else {
+      return next();
+    }   
+  
+    // if robot not found, let the error handler service it
+    if(!rbt) {
+      console.log("FORKLIFT SERVER SIDE STATE: Robot not found: " + mac);
+      return next();
+    }
+
+
+    console.log("FORKLIFT SERVER-SIDE-STATE RESP: ", ress);
+    res.status(200).json(ress);
+  },
+  
 
   /* Simulate a terminal application handler */
   term(req, res, next) {

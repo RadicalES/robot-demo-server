@@ -6,7 +6,7 @@
     "robots" : [ 
         {
             "tagName" : "Forlift 1",
-            "macAddress" : "00:60:35:16:E4:05",
+            "macAddress" : "00:60:35:2C:A2:FF",
             "message" : "Forklift Machine is Ready to go",
             "type" : "FORKLIFT",
             "config" : { 
@@ -94,14 +94,25 @@
             }
         },
         {
+            "tagName" : "Forklift 1A",
+            "macAddress" : "00:60:35:2C:A2:FF",
+            "message" : "Unifrutti Forklift Ready!",
+            "type" : "BARCODE-SCANNER",
+            "config" : { 
+                "security" : "OPEN",
+                "units" : "kg",
+                "serverURL" : "http://192.168.60.108:8086/forklift-sss.cgi"
+            }
+        },
+        {
             "tagName" : "Scanner Station 3C",
-            "macAddress" : "00:60:35:16:E4:05",
+            "macAddress" : "00:60:35:16:E4:00",
             "message" : "Barcode Scanner Ready!",
             "type" : "BARCODE-SCANNER",
             "config" : { 
                 "security" : "OPEN",
                 "units" : "kg",
-                "serverURL" : "http://192.168.60.109:8086/scan.cgi"
+                "serverURL" : "http://192.168.60.108:8086/scan.cgi"
             }
         },
         {
@@ -183,5 +194,5 @@
         }
     ],
     "pallets" : ["10001", "10002", "10003", "10004", "1275005912", "8082275083515"],
-    "locations" : [ { "tagName" : "Location 1", "barcode" : "1275005913" }, { "tagName" : "Location 2", "barcode" : "8082275083515" }]
+    "locations" : [ { "tagName" : "Location 1", "barcode" : "1275005913" }, { "tagName" : "ColdBay A2", "barcode" : "8082275083515" }]
 }
