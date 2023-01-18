@@ -1,7 +1,7 @@
 {
     "__doc__" : "Robot T200/T400 JSON API",
-    "__copy__": "(C) 2020, Radical Electronic Systems",
-    "__revision__" : "Revision 1B",
+    "__copy__": "(C) 2023, Radical Electronic Systems",
+    "__revision__" : "Revision 1D",
 
     "requestInformation" : {
         "MAC" : "AA:BB:CC:00:11:22:"
@@ -60,23 +60,50 @@
         "session" : "0123456789abcdef"
     },
 
+    "requestPalletMove" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "barcode" : "0123456789abcdef",
+        "status" : "REQUEST",
+        "session" : "0123456789abcdef",
+        "location" : "Current Location"
+    },
+
+    "publishPalletStore" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "barcode" : "0123456789abcdef",
+        "status" : "REQUEST",
+        "session" : "0123456789abcdef",
+        "location" : "Current Location",
+        "destination" : "New Location"
+    },
+
     "requestSetup" : {
         "MAC" : "AA:BB:CC:00:11:22",
         "type" : "SOLAS-Scale",
-        "status" : "REQUEST/ACCEPT"
+        "status" : "REQUEST/ACCEPT",
+        "clientURL" : "http://robot-ip/control.cgi"
     },
 
     "responseSetup" : {
         "MAC" : "AA:BB:CC:00:11:22",
+        "status" : "ENABLED/DISABLED",
         "lowLimit" : "850",
         "highLimit" : "1150",
         "units" : "kg",
         "name" : "Weighbridge 1",
         "security" : "OPEN/REQUIRED",
+        "protocol" : "ROBOT-API",
+        "scale" : "MICRO-A12E",
+        "message" : "IDLE MESSAGE",
+        "session" : "0123456789abcdef",
         "date" : "yyyy-mm-dd",
         "time" : "12:00:00",
-        "type" : "TERMINAL/SOLAS-SCALE/BARCODE-SCANNER/BIN-TIPPING",
-        "serverURL" : "http://192.168.0.1/scale.cgi"
+        "type" : "DISABLED/AUTO/TERMINAL/SCALE/SCANNER/BINTIP/FORKLIFT/DUALSCAN/LABELPRINT",
+        "serverURL" : "http://192.168.0.1/scale.cgi",
+        "signOnUsername" : "JWT etc",
+        "signOnPassword" : ""
     },
 
     "publishLogon" : {
@@ -98,6 +125,8 @@
     },
 
     "responseStation" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "status" : "OK/FAIL/DENIED/LOGOFF",
         "LCD1" : "Pallet OK",
         "LCD2" : "#1001010",
         "LCD3" : "Weight:",
@@ -108,6 +137,8 @@
     },
 
     "responseUser" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "status" : "OK",
         "LCD1" : "Pallet OK",
         "LCD2" : "#1001010",
         "LCD3" : "Weight:",
@@ -118,6 +149,8 @@
     },
 
     "responseKeypad" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "status" : "OK",
         "LCD1" : "Enter password",
         "LCD2" : "Press enter",
         "LCD3" : "",
