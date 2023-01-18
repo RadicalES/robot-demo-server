@@ -1,9 +1,26 @@
 {
     "server" : {
-        "ipAddress" : "192.168.60.108",
+        "ipAddress" : "192.168.60.131",
         "port"  : 8086
     },
     "robots" : [ 
+        {
+            "tagName" : "Label Robot 1",
+            "macAddress" : "00:60:35:16:E4:05",
+            "message" : "Patrysberg Labelling",
+            "type" : "AUTO",
+            "protocol" : "ROBOT-API",
+            "config" : { 
+                "type" : "LABELPRINT",
+                "serverURL" : "http://192.168.60.131:8086/label.cgi"
+            },
+            "labels" : [
+                {"B1" : "RED APPLES x 1"},
+                {"B2" : "RED APPLES x 10"},
+                {"B3" : "GREEN APPLES x 1"},
+                {"B4" : "GREEN APPLES x 10"}
+            ]
+        },
         {
             "tagName" : "Forlift 1",
             "macAddress" : "00:60:35:2C:A2:FF",

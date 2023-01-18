@@ -14,6 +14,7 @@ module.exports = (app, config) => {
   app.post('/scale.cgi', router.base, router.scale);
   app.post('/term.cgi', router.base, router.term);
   app.post('/scan.cgi', router.base, router.scan);
+  app.post('/label.cgi', router.base, router.label);
   app.post('/forklift.cgi', router.base, router.forklift);
   app.post('/forklift-sss.cgi', router.base, router.forkliftServerState);
   

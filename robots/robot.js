@@ -1,10 +1,11 @@
 /* (C) 2020 Radical Electronic Systems CC */
 
 const FORKLIFT_STATES = require("./forkliftstates")
+const Label = require("./label")
 
 class Robot {
 
-    constructor(macAddress, config, url) {
+    constructor(macAddress, config, labels, url) {
         this.MacAddress = macAddress;
         this.Config = config;        
         this.Url = url;    
@@ -12,6 +13,10 @@ class Robot {
         this.Session = null;
         this.ForkLiftState = FORKLIFT_STATES.LOAD_SCAN_PALLET;
         this.Pallet = null;
+        this.Labels = labels.map((l, i) => {
+            const e = Object.entries(l)[0];
+            return new Label(i + "tag:" + e[0], e[0], e[1]);
+        });
     }
 
     setOnline(session) {
@@ -32,6 +37,15 @@ class Robot {
 
     getSession() {
         return this.Session;
+    }
+
+    getLabels() {
+        return this.Labels;
+    }
+
+    getLabel(button) {
+        return this.Labels.find((l) =>  { 
+            return l.getButton() === button });
     }
 
     getForkliftState() {

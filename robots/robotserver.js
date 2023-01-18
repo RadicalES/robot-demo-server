@@ -55,8 +55,8 @@ class RobotServer {
     return p;
   }
 
-  addRobot(macAddress, config, url) {
-    let r = new Robot(macAddress, config, url);
+  addRobot(macAddress, config, labels, url) {
+    let r = new Robot(macAddress, config, labels, url);
     robotserver.RobotList.push(r);
     return r;
   }

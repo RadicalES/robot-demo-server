@@ -61,15 +61,35 @@ module.exports = {
       let lr = "false";
 
       if(rbt) {
-        data = {
-          MAC : mac,
-          LCD1 : "Logon Success",
-          LCD2 : id,
-          LCD3 : "Welcome",
-          LCD4 : "John Jo",
-          green : lg,
-          orange : lo,
-          red : lr
+
+        if((typeof rbt.Config.type != 'undefined') && (rbt.Config.type === 'LABELPRINT')){
+
+          console.log("B1: ", rbt.getLabel("B1"));
+
+          data = {
+            MAC : mac,
+            status : "OK",
+            LCD1 : rbt.getLabel("B1").getUserText(),
+            LCD2 : rbt.getLabel("B2").getUserText(),
+            LCD3 : rbt.getLabel("B3").getUserText(),
+            LCD4 : rbt.getLabel("B4").getUserText(),
+            green : lg,
+            orange : lo,
+            red : lr
+          }
+        }
+        else {
+          data = {
+            MAC : mac,
+            status : "OK",
+            LCD1 : "Logon Success",
+            LCD2 : id,
+            LCD3 : "Welcome",
+            LCD4 : "John Jo",
+            green : lg,
+            orange : lo,
+            red : lr
+          }
         }
         
         ress = {
@@ -89,6 +109,7 @@ module.exports = {
 
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Terminal Logged Out",
           LCD2 : "Log in to",
           LCD3 : "Operate Robot",
@@ -167,6 +188,7 @@ module.exports = {
       if(rbt) {
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Button Pressed",
           LCD2 : btn,
           LCD3 : "Success",
@@ -195,6 +217,7 @@ module.exports = {
       if(rbt) {
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "RMT Bin tipped successfully",
           LCD2 : "run:795, tipped: 63",
           LCD3 : "farm:24Z, puc:P1027, orch:REP",
@@ -221,6 +244,77 @@ module.exports = {
 
 
     console.log("SCAN RESP: ", ress);
+    res.status(200).json(ress);
+  },
+
+  /* Simulate a Label Print application handler */
+  label(req, res, next) {
+    let msg = req.body;
+    let ress = {status : "FAIL"}
+    let rbt = null;
+
+    // service a button
+    if("publishPrintLabel" in msg) {
+      const obj = msg["publishPrintLabel"];
+      const id = obj.id;
+      const opt = obj.option;
+      const ses = obj.session;
+
+      let lg = "false";
+      let lo = "false";
+      let lr = "true";
+      let st = "LOGOFF";
+      let usr = "Label Request"
+      let prnt = "Not printing..."
+      mac = obj.MAC;
+      rbt = robotserver.getRobot(mac);
+            
+      if(rbt) {
+
+        if(id === "0") {
+          st = "DENIED"
+          usr = "User not logged on"
+        }
+        else {
+          lr = "false";
+          const lbl = rbt.getLabel(opt);
+          if(typeof lbl !== 'undefined') {
+            prnt = "Printing: " + lbl.getButtonText();
+            lg = "true"
+          }
+          else {
+            prnt = "Button not implemented!" 
+            lo = "true"
+          }
+        }
+
+        data = {
+          MAC : mac,
+          status : st,
+          LCD1 : usr,
+          LCD2 : prnt,
+          LCD3 : "Session:",
+          LCD4 : ses,
+          green : lg,
+          orange : lo,
+          red : lr
+        }
+          
+        ress = {
+          responseStation : data,
+        }
+      }      
+    }
+    else {
+      return next();
+    }   
+
+    if(!rbt) {
+      return next();
+    }
+
+
+    console.log("LABEL PRINT RESP: ", ress);
     res.status(200).json(ress);
   },
 
@@ -252,6 +346,7 @@ module.exports = {
 
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Forklift Empty",
           LCD2 : "Please scan a pallet",
           LCD3 : "",
@@ -283,6 +378,7 @@ module.exports = {
 
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Error state",
           LCD2 : "Reset Robot",
           LCD3 : "",
@@ -300,6 +396,7 @@ module.exports = {
             lg = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Please Scan location",
               LCD2 : "",
               LCD3 : "",
@@ -316,6 +413,7 @@ module.exports = {
             lr = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Pallet does not exist",
               LCD2 : "Please scan again",
               LCD3 : "",
@@ -335,6 +433,7 @@ module.exports = {
             lg = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Forklift Loaded!",
               LCD2 : "Pallet: " + pal.getBarcode(),
               LCD3 : "Location: " + loc.TagName,
@@ -350,6 +449,7 @@ module.exports = {
             lr = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Location not found!",
               LCD2 : "Please scan again",
               LCD3 : "",
@@ -371,6 +471,7 @@ module.exports = {
               lg = "true"
               data = {
                 MAC : mac,
+                status : "OK",
                 LCD1 : "Scan destination",
                 LCD2 : "Pallet: " + pal.getBarcode(),
                 LCD3 : "",
@@ -387,6 +488,7 @@ module.exports = {
 
               data = {
                 MAC : mac,
+                status : "OK",
                 LCD1 : "Pallet barcode do not match",
                 LCD2 : "Scan Pallet barcode again",
                 LCD3 : "",
@@ -401,6 +503,7 @@ module.exports = {
             lr = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Pallet not found!",
               LCD2 : "Please scan again",
               LCD3 : "",
@@ -424,6 +527,7 @@ module.exports = {
             lg = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Pallet stored!",
               LCD2 : "Ready for next pallet",
               LCD3 : "",
@@ -439,6 +543,7 @@ module.exports = {
             lr = "true"
             data = {
               MAC : mac,
+              status : "OK",
               LCD1 : "Location not found!",
               LCD2 : "Please scan again",
               LCD3 : "",
@@ -514,6 +619,7 @@ module.exports = {
       if(rbt) {
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Button Pressed",
           LCD2 : btn,
           LCD3 : "Success",
@@ -580,6 +686,7 @@ module.exports = {
 
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Pallet OK",
           LCD2 : barcode,
           LCD3 : "Success",
@@ -600,6 +707,7 @@ module.exports = {
         plt.setStatus(status);
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Pallet Not Found",
           LCD2 : "Add Pallet?",
           LCD3 : "[1] Add to database",
@@ -644,6 +752,7 @@ module.exports = {
 
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Pallet OK",
             LCD2 : barcode,
             LCD3 : "Success",
@@ -664,6 +773,7 @@ module.exports = {
         lg = "true"
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Pallet not loaded",
           LCD2 : barcode,
           LCD3 : "Failure",
@@ -728,6 +838,7 @@ module.exports = {
 
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Pallet Loaded: " + barcode,
             LCD2 : "Drive safely! Do not look around",
             LCD3 : "Moving from: " + location,
@@ -745,6 +856,7 @@ module.exports = {
           lo = "true"
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Location Not Found",
             LCD2 : "Add Location?",
             LCD3 : "[1] Add to database",
@@ -785,6 +897,7 @@ module.exports = {
           lg = "true";
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Pallet Stored!",
             LCD2 : barcode,
             LCD3 : "At Location:",
@@ -798,6 +911,7 @@ module.exports = {
           lr = "true";
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Pallet Not Stored!",
             LCD2 : barcode,
             LCD3 : "Location not Found:",
@@ -843,6 +957,7 @@ module.exports = {
 
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Pallet OK",
             LCD2 : barcode,
             LCD3 : "Success",
@@ -863,6 +978,7 @@ module.exports = {
         lg = "true"
         data = {
           MAC : mac,
+          status : "OK",
           LCD1 : "Pallet not loaded",
           LCD2 : barcode,
           LCD3 : "Failure",
@@ -907,6 +1023,8 @@ module.exports = {
         const clientURL = obj.clientURL; 
         mac = obj.MAC;
         rbt = robotserver.findConfigByMacAddressAndType(mac, type);
+
+        console.log("ROBOT: ", rbt);
         
         if(status == "REQUEST") {
 
@@ -917,6 +1035,7 @@ module.exports = {
             if(type == "SOLAS-SCALE") {
               setup = {
                 MAC : mac,
+                status : "OK",
                 lowLimit : rbt.config.lowLimit,
                 highLimit : rbt.config.highLimit,
                 units : rbt.config.units,
@@ -933,6 +1052,7 @@ module.exports = {
               if (typeof rbt.config.type === 'undefined') {
                 setup = {
                   MAC : mac,
+                  status : "OK",
                   name : rbt.tagName,
                   security : "OPEN",
                   message : rbt.message,
@@ -945,6 +1065,7 @@ module.exports = {
                 // and we determine the robot application via the setup response
                 setup = {
                   MAC : mac,
+                  status : "OK",
                   name : rbt.tagName,
                   security : "OPEN",
                   message : rbt.message,
@@ -956,7 +1077,7 @@ module.exports = {
             }
 
             // save the robot to the server list
-            robotserver.addRobot(mac, rbt.config, clientURL);
+            robotserver.addRobot(mac, rbt.config, rbt.labels, clientURL);
   
             // build response packet
             ress = {
@@ -1028,15 +1149,33 @@ module.exports = {
         let lr = "false";
   
         if(rbt) {
-          data = {
-            MAC : mac,
-            LCD1 : "Logon Success",
-            LCD2 : id,
-            LCD3 : "Welcome",
-            LCD4 : "John Jo",
-            green : lg,
-            orange : lo,
-            red : lr
+
+          if((typeof rbt.Config.type != 'undefined') && (rbt.Config.type === 'LABELPRINT')){
+            const lbls = rbt.getLabels();
+            data = {
+              MAC : mac,
+              status : "OK",
+              LCD1 : lbls[0],
+              LCD2 : lbls[1],
+              LCD3 : lbls[2],
+              LCD4 : lbls[3],
+              green : lg,
+              orange : lo,
+              red : lr
+            }
+          }
+          else {
+            data = {
+              MAC : mac,
+              status : "OK",
+              LCD1 : "Logon Success",
+              LCD2 : id,
+              LCD3 : "Welcome",
+              LCD4 : "John Jo",
+              green : lg,
+              orange : lo,
+              red : lr
+            }
           }
           
           ress = {
@@ -1055,6 +1194,7 @@ module.exports = {
   
           data = {
             MAC : mac,
+            status : "OK",
             LCD1 : "Terminal Logged Out",
             LCD2 : "Log in to",
             LCD3 : "Operate Robot",
