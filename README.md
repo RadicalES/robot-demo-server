@@ -8,12 +8,13 @@ This server demonstrates the capabilities of the Radical ES Robot Packhouse term
 
 ## Implementation Supported
 
-* Robot Configuration
+* Packer Terminals
 * Pallet Scales
 * Scanner Stations
 * QC Points
 * Forklift Pallet Movement
-* On demand label printing
+* Bin Tip and Intakes
+* On Demand Label Printing
 * Time and Attendance
 
 ## To get up and running
