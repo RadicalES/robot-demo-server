@@ -333,6 +333,21 @@ To publish the pallet move:
 }
 ```
 
+#### Print a label - LABELPRINT Profile
+The following packet will be send to print a label.
+Note that the server can force the user to logoff immediately setting the responseStation status to LOGOFF.
+```JSON
+{
+    "publishPrintLabel" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "option" : "0123456789abcdef",
+        "status" : "NORMAL",
+        "session" : "0123456789abcdef",
+    }
+}
+```
+
 </p>
 </details>
 

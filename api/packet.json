@@ -87,6 +87,14 @@
         "status" : "NORMAL/ENTERED"
     },
 
+    "publishPrintLabel" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "option" : "0123456789abcdef",
+        "session" : "0123456789abcdef",
+        "status" : "NORMAL"
+    },
+
     "requestSetup" : {
         "MAC" : "AA:BB:CC:00:11:22",
         "type" : "SOLAS-Scale",
