@@ -56,6 +56,7 @@ module.exports = {
       const mac = obj.MAC;
       const id = obj.id;
       const rbt = robotserver.getRobot(mac);
+      const usr = robotserver.findUser(id);
       let lg = "true";
       let lo = "false";
       let lr = "false";
@@ -84,8 +85,8 @@ module.exports = {
             status : "OK",
             LCD1 : "Logon Success",
             LCD2 : id,
-            LCD3 : "Welcome",
-            LCD4 : "John Jo",
+            LCD3 : "Welcome: " + usr.getName(),
+            LCD4 : "",
             green : lg,
             orange : lo,
             red : lr
@@ -124,6 +125,19 @@ module.exports = {
         }
       }
     }
+    else if("requestRpcList" in msg) {
+      ress = {
+        responseRpcList : [
+          { "REM-PAL": "Remove current pallet" },
+          { "LOD-PAL": "Load existing pallet" },
+          { "REM-BOX": "Remove carton from pallet" },
+          { "FIND-PAL": "Find pallet" },
+          { "REST-PAL": "Restore pallet" },
+          { "REBUILD-PAL": "Rebuild pallet" },
+          { "LOOK-BOX": "Lookup carton" },
+        ]
+      }
+    }
     else {
       return next();
     }
@@ -136,10 +150,10 @@ module.exports = {
   error(req, res) {
     const hdr = req.headers;
     
-    if((req.method == "POST") && (hdr['user-agent'] === 'Robot-T201')) {
-
+    //if((req.method == "POST") && ((hdr['user-agent'] === 'Robot-T201') || (hdr['user-agent'] === 'Robot-T202'))) {
+      if(req.method == "POST") {
       // command not supported, send reset
-      ress = {
+      const ress = {
         requestReset : {
           MAC : "00:00:00:00:00:00"
         },
@@ -208,9 +222,10 @@ module.exports = {
       const obj = msg["publishBarcodeScan"];
       const barcode = obj.barcode;
       const id = obj.id;
-      let lg = "false";
+      let lg = id === '0' ? "false" : "true";
+      let lr = id !== '0' ? "false" : "true";
       let lo = "false";
-      let lr = "false";
+      
       mac = obj.MAC;
       rbt = robotserver.getRobot(mac);
 
@@ -218,10 +233,10 @@ module.exports = {
         data = {
           MAC : mac,
           status : "OK",
-          LCD1 : "RMT Bin tipped successfully",
-          LCD2 : "run:795, tipped: 63",
-          LCD3 : "farm:24Z, puc:P1027, orch:REP",
-          LCD4 : "cult: BI_PR, / WBC",
+          LCD1 : id === '0' ? "Not authorized" : "Scan OK",
+          LCD2 : id === '0' ? "Sign on first" : "Barcode: " + barcode,
+          LCD3 : "",
+          LCD4 : id === '0' ? "" : "ID: " + id,
           green : lg,
           orange : lo,
           red : lr
@@ -238,10 +253,9 @@ module.exports = {
   
     // if robot not found, let the error handler service it
     if(!rbt) {
-      console.log("TERM: Robot not found: " + mac);
+      console.log("SCAN: Robot not found: " + mac);
       return next();
     }
-
 
     console.log("SCAN RESP: ", ress);
     res.status(200).json(ress);
@@ -1010,6 +1024,11 @@ module.exports = {
     res.status(200).json(ress);
   },
 
+  /*
+  
+  HTTP RX [000001A4]: {"responseSetup":{"MAC":"80:1F:12:4D:CC:3F","status":"ENABLED","lowLimit":100,"highLimit":1000,"units":"kg","name":"Unifrutti Palletizing","security":"OPEN","protocol":"ROBOT-API","scale":"MICRO-A12E","date":"2023-02-19","time":"17:26:19",
+  "type":"DUALSCAN","session":"08521fe8-ecda-495a-82eb-d73550250f00","message":"Not set","serverURL":"http://192.168.60.4:8200/api/v1/scada/","signOnUsername":"","signOnPassword":""}}
+  */
   setup(req, res, next) {
       let msg = req.body;
       let ress = {status : "FAIL"}
@@ -1070,6 +1089,7 @@ module.exports = {
                   security : "OPEN",
                   message : rbt.message,
                   type : rbt.config.type,
+                  protocol : "ROBOT-API",
                   session : robotserver.getNewSession(),
                   serverURL : rbt.config.serverURL
                 }

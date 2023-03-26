@@ -1,7 +1,7 @@
 {
     "server" : {
         "ipAddress" : "192.168.60.131",
-        "port"  : 8086
+        "port"  : 8200
     },
     "robots" : [ 
         {
@@ -11,8 +11,8 @@
             "type" : "AUTO",
             "protocol" : "ROBOT-API",
             "config" : { 
-                "type" : "LABELPRINT",
-                "serverURL" : "http://192.168.60.131:8086/label.cgi"
+                "type" : "SOLAS-SCALE",
+                "serverURL" : "http://192.168.60.131:8086/scale.cgi"
             },
             "labels" : [
                 {"B1" : "RED APPLES x 1"},
@@ -225,8 +225,25 @@
                 "type" : "BIN-TIPPING",
                 "serverURL" : "http://192.168.1.2:8087/scan.cgi"
             }
+        },
+        {
+            "tagName" : "UF Dual Palletizing",
+            "macAddress" : "80:1F:12:4D:3A:1C",
+            "message" : "Dual Palletizing Ready",
+            "type" : "AUTO",
+            "config" : { 
+                "security" : "OPEN",
+                "type" : "BARCODE-SCANNER",
+                "serverURL" : "http://192.168.60.131:8200/scan.cgi"
+            }
         }
     ],
     "pallets" : ["10001", "10002", "10003", "10004", "1275005912", "8082275083515"],
-    "locations" : [ { "tagName" : "Location 1", "barcode" : "1275005913" }, { "tagName" : "ColdBay A2", "barcode" : "8082275083515" }]
+    "locations" : [ { "tagName" : "Location 1", "barcode" : "1275005913" }, { "tagName" : "ColdBay A2", "barcode" : "8082275083515" }],
+    "users" : [ 
+        {"username" : "Blanco", "code" : "19045399597"}, 
+        {"username" : "Staedtler", "code" : "4007817504598"}, 
+        {"username" : "Henry", "code" : "19045409306"}, 
+        {"username" : "Pick n Pay", "code" : "7353280317297402"}]
 }
+

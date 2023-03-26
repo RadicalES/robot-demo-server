@@ -13,7 +13,7 @@ class Robot {
         this.Session = null;
         this.ForkLiftState = FORKLIFT_STATES.LOAD_SCAN_PALLET;
         this.Pallet = null;
-        this.Labels = labels.map((l, i) => {
+        this.Labels = labels?.map((l, i) => {
             const e = Object.entries(l)[0];
             return new Label(i + "tag:" + e[0], e[0], e[1]);
         });

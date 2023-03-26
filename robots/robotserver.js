@@ -6,6 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 const Robot = require('./robot');
 const Pallet = require('./pallet');
 const Location = require('./location');
+const User = require('./user')
 
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
 const csvWriter = createCsvWriter({
@@ -25,6 +26,7 @@ class RobotServer {
     this.RobotList = [];
     this.PalletList = config.pallets.map((p) => new Pallet(p, 0.0));
     this.LocationList = config.locations.map((l) => new Location(l.tagName, l.barcode, 0));
+    this.UserList = config.users.map((u) => new User(u.username, u.code));
   }
 
   findConfigByMacAddress(macAddress) {
@@ -41,6 +43,19 @@ class RobotServer {
 
   findLocation(barcode) {
     return robotserver.LocationList.find((l) => l.getBarcode() === barcode );
+  }
+
+  findUser(code) {
+    let usr = robotserver.UserList.find((u) => u.getCode() === code);
+
+    console.log("USer: ", usr);
+
+    if(!usr) {
+      usr = new User("Unknown user", code);
+      this.UserList.push(usr);
+    }
+
+    return usr;
   }
 
   movePallet(pallet, location) {
