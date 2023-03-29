@@ -138,6 +138,42 @@ module.exports = {
         ]
       }
     }
+    else if("requestRpcExecute" in msg) {
+
+      const obj = msg["requestRpcExecute"];
+      const mac = obj.MAC;
+      const call = obj.call;
+      const id = obj.id;
+      const barcode = obj.barcode;
+      const rbt = robotserver.getRobot(mac);
+
+      const lg = (barcode === "") ? "false" : "true";
+      const lo = (barcode === "") ? "true" : "false";
+      const lr = "false";
+      const lcd3 = (barcode === "") ? "By Button" : "By Scanner";
+      const lcd4 = (barcode === "") ? "" : "Barcode: " + barcode;
+
+      if(rbt) {
+
+        data = {
+          MAC : mac,
+          status : "SUCCESS",
+          LCD1 : "Executing Server Function",
+          LCD2 : call,
+          LCD3 : lcd3,
+          LCD4 : lcd4,
+          green : lg,
+          orange : lo,
+          red : lr
+        }
+        
+        ress = {
+          responseStation : data,
+        }
+
+      }
+
+    }
     else {
       return next();
     }

@@ -351,6 +351,78 @@ Note that the server can force the user to logoff immediately setting the respon
 </p>
 </details>
 
+<details><summary>Remote Procedure Calls</summary>
+The server can provide a list of RPCs for the Robot to execute. By holding down the designated button, assigned differently for each keypad variation, the user can access a list of RPCs. To execute the RPC, the operator can either press a button or scan a barcode.
+<p>
+
+### Request a List of RPCs
+During the Robot's boot cycle it will request a list of RPCs. If not supported the server can simply provide an empty array. The returned data is a key-value-pair, of which the key is the command the value the description. The KEY will be send to the server to execute the particular RPC. The maximum RPCs are 8 and the command KEY length 16 characters.
+
+#### RPC List Request Command
+```JSON
+{
+    "requestRpcList" : {
+        "MAC" : "AA:BB:CC:00:11:22"
+    }
+}
+```
+
+#### RPC List Response Payload
+```JSON
+{
+  "responseRpcList": 
+  [
+    { "REM-PAL": "Remove current pallet" },
+    { "LOD-PAL": "Load existing pallet" },
+    { "REM-BOX": "Remove carton from pallet" },
+    { "FIND-PAL": "Find pallet" },
+    { "REST-PAL": "Restore pallet" },
+    { "REBUILD-PAL": "Rebuild pallet" },
+    { "LOOK-BOX": "Lookup carton" }
+  ]
+}
+```
+
+### Execute a RPC Command
+The operator must access the RPC list by holding the correct button for more than three seconds. After which the RPC list will appear. Navigate to the correct item and execute by either pressing a button or scanner a barcode. By pressing cancel the user can return to the operator view.
+
+#### RPC Execute Command
+```JSON
+{
+    
+    "requestRpcExecute": {
+    "MAC" : "80:1F:12:4D:3A:1C",
+    "session" : "041bff54-3959-4db7-b3d5-6995843fa3ae",
+    "id" : "0",
+    "barcode": "4974052804014",
+    "call": "REBUILD-PAL",
+    "status": "NORMAL"
+  }
+}
+```
+
+#### RPC Execute Command Response
+The response is any of the standard server responses.
+For example:
+```JSON
+{
+  "responseStation": {
+    "MAC": "80:1F:12:4D:3A:1C",
+    "status": "SUCCESS",
+    "LCD1": "Executing Server Function",
+    "LCD2": "REBUILD-PAL",
+    "LCD3": "By Scanner",
+    "LCD4": "Barcode: 4974052804014",
+    "green": "true",
+    "orange": "false",
+    "red": "false"
+  }
+}
+```
+
+</p>
+</details>
+
 <details><summary>Server Responses</summary>
 The Robot statemachine can be redirected by different responses.
 <p>
