@@ -57,27 +57,30 @@ module.exports = {
       const id = obj.id;
       const rbt = robotserver.getRobot(mac);
       const usr = robotserver.findUser(id);
-      let lg = "true";
-      let lo = "false";
+      let lg = "false";
+      let lo = "true";
       let lr = "false";
 
       if(rbt) {
 
         if((typeof rbt.Config.type != 'undefined') && (rbt.Config.type === 'LABELPRINT')){
 
-          console.log("B1: ", rbt.getLabel("B1"));
-
           data = {
             MAC : mac,
             status : "OK",
-            LCD1 : rbt.getLabel("B1").getUserText(),
-            LCD2 : rbt.getLabel("B2").getUserText(),
-            LCD3 : rbt.getLabel("B3").getUserText(),
-            LCD4 : rbt.getLabel("B4").getUserText(),
+            LCD1 : "Please enter station number",
+            LCD2 : "Press enter when done",
+            LCD3 : "",
+            LCD4 : "",
             green : lg,
             orange : lo,
             red : lr
           }
+
+          ress = {
+            responseKeypad : data,
+          }
+
         }
         else {
           data = {
@@ -91,11 +94,48 @@ module.exports = {
             orange : lo,
             red : lr
           }
+
+          ress = {
+            responseStation : data,
+          }
+
         }
         
-        ress = {
-          responseStation : data,
+      }
+      
+    }
+    else if("publishKeypadCode" in msg) {
+      const obj = msg["publishKeypadCode"];
+      const mac = obj.MAC;
+      const id = obj.id;
+      const rbt = robotserver.getRobot(mac);
+      const usr = robotserver.findUser(id);
+      let lg = "true";
+      let lo = "false";
+      let lr = "false";
+
+      if(rbt) {
+
+        if((typeof rbt.Config.type != 'undefined') && (rbt.Config.type === 'LABELPRINT')){
+
+          data = {
+            MAC : mac,
+            status : "OK",
+            LCD1 : rbt.getLabel("B1").getUserText(),
+            LCD2 : rbt.getLabel("B2").getUserText(),
+            LCD3 : rbt.getLabel("B3").getUserText(),
+            LCD4 : rbt.getLabel("B4").getUserText(),
+            green : lg,
+            orange : lo,
+            red : lr
+          }
+
+          ress = {
+            responseStation : data,
+          }
+          
         }
+
       }
     }
     else if("publishLogoff" in msg) {

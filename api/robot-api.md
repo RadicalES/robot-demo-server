@@ -333,6 +333,21 @@ To publish the pallet move:
 }
 ```
 
+#### Response 
+In response to "responseKeypad":
+This will redirect the user to keypad input. Important that this is only supported by Robots with full keypads. The "code" attribute is the entered value.
+```JSON
+{
+    "publishKeypadCode" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "code" : "0123456789abcdef",
+        "status" : "NORMAL",
+        "session" : "0123456789abcdef",
+    }
+}
+```
+
 #### Print a label - LABELPRINT Profile
 The following packet will be send to print a label.
 Note that the server can force the user to logoff immediately setting the responseStation status to LOGOFF.
@@ -468,7 +483,7 @@ The Robot statemachine will redirect to a screen where user input can be prompte
 ```
 
 #### Response-Keypad
-Response-Keypad is only applicable to a full keypad version of the Robot. In this case a string of numbers can be entered and upon pressing enter it will be submitted to the server.
+Response-Keypad is only applicable to a full keypad version of the Robot. In this case a string of numbers can be entered and upon pressing enter it will be submitted to the server. See "publishKeypadCode".
 ```JSON
 {
     "responseKeypad" : {

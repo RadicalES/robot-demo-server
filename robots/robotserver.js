@@ -77,6 +77,12 @@ class RobotServer {
   }
 
   getRobot(macAddress) {
+
+    // some command append :0A or :0B for station position identification
+    if(macAddress.length > 16) {
+      macAddress = macAddress.slice(0,17);
+    }
+
     return robotserver.RobotList.find((r) => r.getMacAddress() === macAddress );
   }
 

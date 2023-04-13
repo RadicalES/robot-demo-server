@@ -23,13 +23,13 @@
         },
         {
             "tagName" : "Label Station 1A",
-            "macAddress" : "00:60:35:16:E4:05",
+            "macAddress" : "00:60:35:24:42:85",
             "message" : "Patrysberg Labelling Ready!",
             "type" : "AUTO",
             "protocol" : "ROBOT-API",
             "config" : { 
                 "type" : "LABELPRINT",
-                "serverURL" : "http://192.168.60.131:8086/label.cgi"
+                "serverURL" : "http://192.168.60.131:8200/label.cgi"
             },
             "labels" : [
                 {"B1" : "RED APPLES x 1"},
@@ -233,7 +233,7 @@
             "type" : "AUTO",
             "config" : { 
                 "security" : "OPEN",
-                "type" : "BARCODE-SCANNER",
+                "type" : "DUALSCAN",
                 "serverURL" : "http://192.168.60.131:8200/scan.cgi"
             }
         }
