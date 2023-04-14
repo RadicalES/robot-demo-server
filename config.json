@@ -1,7 +1,7 @@
 {
     "server" : {
         "ipAddress" : "192.168.60.131",
-        "port"  : 8200
+        "port"  : 8086
     },
     "robots" : [ 
         {
@@ -228,13 +228,13 @@
         },
         {
             "tagName" : "UF Dual Palletizing",
-            "macAddress" : "80:1F:12:4D:3A:1C",
+            "macAddress" : "80:1F:12:4D:6F:10",
             "message" : "Dual Palletizing Ready",
             "type" : "AUTO",
             "config" : { 
                 "security" : "OPEN",
                 "type" : "DUALSCAN",
-                "serverURL" : "http://192.168.60.131:8200/scan.cgi"
+                "serverURL" : "http://192.168.60.131:8086/scan.cgi"
             }
         }
     ],

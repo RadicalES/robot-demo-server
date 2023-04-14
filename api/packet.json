@@ -1,7 +1,7 @@
 {
     "__doc__" : "Robot T200/T400 JSON API",
     "__copy__": "(C) 2023, Radical Electronic Systems",
-    "__revision__" : "Revision 1F",
+    "__revision__" : "Revision 1G",
 
     "requestInformation" : {
         "MAC" : "AA:BB:CC:00:11:22:"
@@ -69,6 +69,30 @@
         "location" : "Current Location"
     },
 
+    "requestRpcList" : {
+        "MAC" : "AA:BB:CC:00:11:22"
+    },
+
+    "responseRpcList": 
+    [
+        { "REM-PAL": "Remove current pallet" },
+        { "LOD-PAL": "Load existing pallet" },
+        { "REM-BOX": "Remove carton from pallet" },
+        { "FIND-PAL": "Find pallet" },
+        { "REST-PAL": "Restore pallet" },
+        { "REBUILD-PAL": "Rebuild pallet" },
+        { "LOOK-BOX": "Lookup carton" }
+    ],
+
+    "requestRpcExecute": {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "session" : "0123456789abcdef",
+        "id" : "0",
+        "barcode" : "0123456789abcdef",
+        "call": "EXECUTE",
+        "status": "NORMAL"
+    },
+
     "publishPalletStore" : {
         "MAC" : "AA:BB:CC:00:11:22",
         "id" : "0123456789abcdef",
@@ -120,7 +144,7 @@
         "serverURL" : "http://192.168.0.1/scale.cgi",
         "signOnUsername" : "JWT etc",
         "signOnPassword" : ""
-    },
+    },    
 
     "publishLogon" : {
         "MAC" : "AA:BB:CC:00:11:22",
@@ -140,6 +164,18 @@
         "value" : "B1/B2/B3/B4/B5/B6",
         "session" : "0123456789abcdef"
     },
+
+    "responseKeypad" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "status" : "OK",
+        "LCD1" : "Enter password",
+        "LCD2" : "Press enter",
+        "LCD3" : "",
+        "LCD4" : "",
+        "Green" : "true/false",
+        "Orange" : "true/false",
+        "Red" : "true/false"
+    },    
 
     "responseStation" : {
         "MAC" : "AA:BB:CC:00:11:22",
