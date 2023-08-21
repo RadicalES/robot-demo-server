@@ -24,14 +24,14 @@ Communications is based on a client-server topology and this is implemented bidi
 
 The Robot requires a boot configuration that is supplied by a configuration- server. There after communications continue on a transaction-server. Splitting concerns for configuration and transaction is not necessary on smaller installations.
 
-Robots and their API is designed to run at scale with zero network administration requirements. A server configuration provider can reboot or reconfigure a Robot or cluster of Robots at will. Network parameters or application settings can be change at run time.
+Robots and their API is designed to run at scale with zero network administration requirements. A server configuration provider can reboot or reconfigure a Robot or cluster of Robots at will. Network parameters or application settings can be changed at run time.
 
 ## Robot Operations
 Basic purpose of the Robot is to link packhouse floor operations to IT systems in a deterministic manner. A LCD screen, LEDs & Buttons provide user interaction. One or two scanners can be attached for QC or palletizing purposes. Or a scale and scanner for SOLAS scales. The Robot and its API provide a single point and consistent solution to real world requirements in packhouses. It make it easy for IT systems to connect various operations in packhouses in a simplistic manner. The Robot provides a specified bridge between packhouse floor operations and IT systems.
 
-## Robot DHCP Optional Parameters
+## DHCP Optional Parameters
 It is possible to configure the Robot terminal without accessing the device directly.
-The Robot support additional DHCP scope parameters while acquiring its leased address. Two addtional paramters can be specified specifying an IP address and port from where it can retrieve its configuration. It is also possible that this server only serve as a first hop to the next location of an configration resource server.
+The Robot support additional DHCP scope parameters while acquiring its leased address. Two addtional paramters can be included specifying an IP address and port which can provide its runtime configuration. It is also possible that this server only serve as a first hop to provode the next location of an configration resource server.
 
 ### DHCP Optional Parameters
 The table below details the optional parameter values.
@@ -40,10 +40,10 @@ The table below details the optional parameter values.
 |Robot Server Ip Address|182|4 byte ip address|192.168.1.100|
 |Robot Server Port|183|16-bit number|8080| 
 
-### Robot Request URL
-The Robot request URL is fixed and assembled from the provided IP address and port. Below is the format of the URL. A server will need to listen to that endpoint and either provide the URL of the next setup server, or provide a full setup to the Robot.
+### Boot Setup Request URL
+The Robot setup request URL is fixed and assembled from the DHCP options provided IP address and port. Below is the format of the URL. A server will need to listen at that endpoint and either provide the URL of the next setup server, or provide a full runtime setup to the Robot.
 
-#### URL format
+#### Assembled URL format
 http://[server-ip]:[port]/robot/api/setup/?boot=true
 
 ### Diagram of boot process
@@ -54,8 +54,8 @@ http://[server-ip]:[port]/robot/api/setup/?boot=true
 2. If found it will contact the server with an *requestSetup* packet.
 3. The response can be *responseSetup* or *responseSetupURL*.
 4. *responseSetup* must provide a full setup for the Robot to operate from.
-5. *responseSetupULR* simply provides and URL of a contactable resource that can provide a full setup.
-6. In the case the optional parameters are not present, the Robot will use the locally stored URL to retrieve its setup from.
+5. *responseSetupULR* only provides an URL of a contactable resource that can provide a complete runtime setup.
+6. In the case where the optional parameters are not present, the Robot will use the locally stored URL, set via its web GUI, as the location to contact for a runtime setup.
 
 
 <details><summary>Basic Command Structure</summary>
