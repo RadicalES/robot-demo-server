@@ -39,13 +39,12 @@ The table below details the optional parameter values.
 |:---:|:---:|:---:|:---:|
 |Robot Server Ip Address|182|4 byte ip address|192.168.1.100|
 |Robot Server Port|183|16-bit number|8080| 
-|||||
 
 ### Robot Request URL
 The Robot request URL is fixed and assembled from the provided IP address and port. Below is the format of the URL. A server will need to listen to that endpoint and either provide the URL of the next setup server, or provide a full setup to the Robot.
 
 #### URL format
-http://<server-ip>:<port>/robot/api/setup/?boot=true
+http://[server-ip]:[port]/robot/api/setup/?boot=true
 
 ### Diagram of boot process
 <img src="../images/robot-boot-dhcp.png" alt="Robot-DHCP-Boot" title="Robot DHCP Boot Process" width="600" />
