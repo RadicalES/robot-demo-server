@@ -29,6 +29,36 @@ Robots and their API is designed to run at scale with zero network administratio
 ## Robot Operations
 Basic purpose of the Robot is to link packhouse floor operations to IT systems in a deterministic manner. A LCD screen, LEDs & Buttons provide user interaction. One or two scanners can be attached for QC or palletizing purposes. Or a scale and scanner for SOLAS scales. The Robot and its API provide a single point and consistent solution to real world requirements in packhouses. It make it easy for IT systems to connect various operations in packhouses in a simplistic manner. The Robot provides a specified bridge between packhouse floor operations and IT systems.
 
+## Robot DHCP Optional Parameters
+It is possible to configure the Robot terminal without accessing the device directly.
+The Robot support additional DHCP scope parameters while acquiring its leased address. Two addtional paramters can be specified specifying an IP address and port from where it can retrieve its configuration. It is also possible that this server only serve as a first hop to the next location of an configration resource server.
+
+### DHCP Optional Parameters
+The table below details the optional parameter values.
+|Scope Name|Value|Type|Example|
+|:---:|:---:|:---:|:---:|
+|Robot Server Ip Address|182|4 byte ip address|192.168.1.100|
+|Robot Server Port|183|16-bit number|8080| 
+|||||
+
+### Robot Request URL
+The Robot request URL is fixed and assembled from the provided IP address and port. Below is the format of the URL. A server will need to listen to that endpoint and either provide the URL of the next setup server, or provide a full setup to the Robot.
+
+#### URL format
+http://<server-ip>:<port>/robot/api/setup/?boot=true
+
+### Diagram of boot process
+<img src="../images/robot-boot-dhcp.png" alt="Robot-DHCP-Boot" title="Robot DHCP Boot Process" width="600" />
+
+#### The boot process
+1. The Robot will look for additional parameters 182 & 183.
+2. If found it will contact the server with an *requestSetup* packet.
+3. The response can be *responseSetup* or *responseSetupURL*.
+4. *responseSetup* must provide a full setup for the Robot to operate from.
+5. *responseSetupULR* simply provides and URL of a contactable resource that can provide a full setup.
+6. In the case the optional parameters are not present, the Robot will use the locally stored URL to retrieve its setup from.
+
+
 <details><summary>Basic Command Structure</summary>
 
 <p>
@@ -189,6 +219,18 @@ On boot the server must provide important information to the Robot. Various sett
         "type" : "SOLAS-Scale",
         "status" : "REQUEST"
     }
+}
+```
+
+### Server Response Setup URL only
+```JSON
+{
+
+ "responseSetupURL" : {
+    "MAC" : "AA:BB:CC:00:11:22",
+    "status" : "ENABLED/DISABLED",
+    "serverURL" : "http://192.168.0.1/setup.cgi",
+ }
 }
 ```
 
