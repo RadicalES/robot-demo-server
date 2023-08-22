@@ -50,11 +50,11 @@ http://[server-ip]:[port]/robot/api/setup/?boot=true
 <img src="../images/robot-boot-dhcp.png" alt="Robot-DHCP-Boot" title="Robot DHCP Boot Process" width="600" />
 
 #### The boot process
-1. The Robot will look for additional parameters 182 & 183.
+1. The Robot will look for optional DHCP parameters 182 & 183.
 2. If found it will contact the server with an *requestSetup* packet.
 3. The response can be *responseSetup* or *responseSetupURL*.
 4. *responseSetup* must provide a full setup for the Robot to operate from.
-5. *responseSetupULR* only provides an URL of a contactable resource that can provide a complete runtime setup.
+5. *responseSetupULR* only has an URL to a contactable resource that must provide a complete runtime setup.
 6. In the case where the optional parameters are not present, the Robot will use the locally stored URL, set via its web GUI, as the location to contact for a runtime setup.
 
 
