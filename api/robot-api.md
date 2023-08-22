@@ -33,7 +33,7 @@ Basic purpose of the Robot is to link packhouse floor operations to IT systems i
 It is possible to configure the Robot terminal without accessing the device directly.
 The Robot support additional DHCP scope parameters while acquiring its leased address. Two addtional paramters can be included specifying an IP address and port which can provide its runtime configuration. It is also possible that this server only serve as a first hop to provode the next location of an configration resource server.
 
-### DHCP Optional Parameters
+### Optional Parameters Details
 The table below details the optional parameter values.
 |Scope Name|Value|Type|Example|
 |:---:|:---:|:---:|:---:|
