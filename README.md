@@ -2,7 +2,10 @@
 The demo server demonstrates the capabilities of the Radical ES Robot Packhouse terminal. It implements the full set of the [Robot API](api/robot-api.md). It show how to response to a Robot configuration request and regular pings. 
 This is a reworked version from the original, which was mainly written for test purposes.
 
-# Variants
+## Status!
+Very much still a work in progress :)
+
+## Variants
 |Robot-T200|Robot-T201|Robot-T202|Robot-T203|
 |:---:|:---:|:---:|:---:|
 |<img src="images/rbt200.jpg" alt="Robot-T200" title="Robot T200 Keypad" width="200" />|<img src="images/rbt201.png" alt="Robot-T201" title="Robot T201 Keypad" width="200" />|<img src="images/rbt202.png" alt="Robot-T202" title="Robot T202 Keypad" width="200" />|<img src="images/rbt203.png" alt="Robot-T203" title="Robot T203 Keypad" width="200" />|
