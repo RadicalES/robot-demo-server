@@ -34,8 +34,8 @@ class RobotRepository {
     return robotConfigList.robots.find((r) => r.macAddress === macAddress && r.type === type)
   }
 
-  addRobot(macAddress, config, labels, url) {
-    const r = new Robot(macAddress, config, labels, url);
+  addRobot(macAddress, config, labels, rpcList, url) {
+    const r = new Robot(macAddress, config, labels, rpcList, url);
     robotRepository.RobotList.push(r);
     return r;
   }
@@ -80,7 +80,6 @@ class RobotRepository {
     this.PalletList.push(p);
     return p;
   }
-
 
   getNewSession() {
     return uuidv4();

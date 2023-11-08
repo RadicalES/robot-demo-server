@@ -9,7 +9,7 @@ const TAG = "RobotObject";
 class Robot {
 
 
-  constructor(macAddress, config, labels, url) {
+  constructor(macAddress, config, labels, rpcList, url) {
     this.MacAddress = macAddress;
     this.Config = config;
     this.Url = url;
@@ -22,6 +22,7 @@ class Robot {
       const v = Object.values(l)[0];
       return new Label(i + "tag: " + k, k);
     });
+    this.RpcList = rpcList || [];
   }
 
   setOnline(session) {
@@ -51,6 +52,10 @@ class Robot {
   getLabel(button) {
       return this.Labels.find((l) =>  { 
           return l.getButton() === button });
+  }
+
+  getRpcList() {
+    return this.RpcList;
   }
 
   getForkliftState() {

@@ -5,6 +5,8 @@ const ROBOT_COMMANDS = require('../../constants/ROBOT_COMMANDS');
 const ROBOT_APP_TYPES = require('../../constants/ROBOT_APP_TYPES');
 const ROBOT_STATUS_CODES = require('../../constants/ROBOT_STATUS_CODES');
 const ROBOT_API_TYPES = require('../../constants/ROBOT_API_TYPES');
+const ROBOT_BUTTONS = require('../../constants/ROBOT_BUTTONS');
+const StationResponse = require('../../models/StationReponse');
 const robotRepository = require('../../repository/robots/RobotRepository');
 
 const TAG = "RobotService";
@@ -12,45 +14,7 @@ const TAG = "RobotService";
 class RobotService {
 
   constructor() {
-
   }
-
-  processBaseMessage(message) {
-
-    let resp = null;
-
-    console.log("processBaseMessage: ", message)
-
-
-    if('requestPing' in message) {
-
-      const obj = message['requestPing']
-
-
-    }
-    else if('requestPing' in message) {
-      const obj = message['requestPing']
-    }
-    else if('publishLogon' in message) {
-      const obj = message['publishLogon']
-    }
-    else if('publishLogoff' in message) {
-      const obj = message['publishLogoff']
-    }
-    else if('publishKeypadCode' in message) {
-      const obj = message['publishKeypadCode']
-    }
-    else if('requestRpcList' in message) {
-      const obj = message['requestRpcList']
-    }
-    else if('requestRpcExecute' in message) {
-      const obj = message['requestRpcExecute']
-    }
-
-    return resp;
-  }
-
-
 
   processSetup(data) {
     
@@ -70,9 +34,11 @@ class RobotService {
         logd(TAG, "Found setup for Robot:\nSTART>>>\n", rbt);
         logd(TAG, "END>>>\n");
 
+        let respData = null;
+
         // Robot supply its type as definitive
         if(type === ROBOT_APP_TYPES.APP_TYPE_SCALE) {
-          resp = {
+          respData = {
             MAC : mac,
             status : ROBOT_STATUS_CODES.STATUS_OK,
             lowLimit : rbt.config.lowLimit,
@@ -87,7 +53,7 @@ class RobotService {
           }
         }
         else if(type === ROBOT_APP_TYPES.APP_TYPE_AUTO) {
-          resp = {
+          respData = {
             MAC : mac,
             status : ROBOT_STATUS_CODES.STATUS_OK,
             name : rbt.tagName,
@@ -103,7 +69,7 @@ class RobotService {
         else {
           // application profile should be fixed
           if (typeof rbt.config.type === 'undefined') {
-            resp = {
+            respData = {
               MAC : mac,
               status : ROBOT_STATUS_CODES.STATUS_OK,
               name : rbt.tagName,
@@ -116,7 +82,7 @@ class RobotService {
           else { 
             // Simulate a setup when the robot is set to auto profile
             // and we determine the robot application via the setup response
-            resp = {
+            respData = {
               MAC : mac,
               status : ROBOT_STATUS_CODES.STATUS_OK,
               name : rbt.tagName,
@@ -130,7 +96,9 @@ class RobotService {
           }
         }
         
-        robotRepository.addRobot(mac, rbt.config, rbt.labels, clientUrl);  
+        resp = { responseSetup : respData };
+
+        robotRepository.addRobot(mac, rbt.config, rbt.labels, rbt.rpcList, clientUrl);  
       }
     }
 
@@ -167,19 +135,61 @@ class RobotService {
   }
 
 
+  /*
+  
+   barcode: '1123123',
+  id: '',
+  MAC: '00:60:35:24:42:85',
+  session: '577fda72-5963-40db-b861-40b1a914caab',
+  value: 'B1'
+  
+  
+  */
   processButton(data) {
     
     logd(TAG, 'processButton', data);
     
     const mac = data.MAC;
-    const type = data.type;
-    const status = data.status;
-    const clientUrl = data.clientUrl;
+    const rbt = robotRepository.getRobot(mac);
+    const barcode = data.barcode;
+    const id = data.id;
+    const btn = data.value;
+    let lg = "false";
+    let lo = "false";
+    let lr = "false";
     let resp = null;
 
+    if(rbt) {
 
+      logd(TAG, "Robot OK");
 
+      if(btn === ROBOT_BUTTONS.BUTTON_1) {
+        lr = "true"
+      }
+      else if(btn === ROBOT_BUTTONS.BUTTON_2) {
+        lo = "true"
+      }
+      else if(btn === ROBOT_BUTTONS.BUTTON_3) {
+        lg = "true"
+      }
+      else if(btn === ROBOT_BUTTONS.BUTTON_4) {
+        lg = "true"
+        lr = "true"
+      }
+      else if(btn === ROBOT_BUTTONS.BUTTON_5) {
+        lg = "true"
+        lo = "true"
+      }
 
+      const res = new StationResponse(mac, ROBOT_STATUS_CODES.STATUS_OK, 
+            "Button Pressed", btn, "Success", "Press next button", lg, lo, lg);
+      
+            logd(TAG, "Robot RESP", res);
+
+            resp = res.getResponse();
+    }
+
+    return resp;
   }
 
   processBarcode(data) {
@@ -278,16 +288,17 @@ class RobotService {
     logd(TAG, 'getRpcList', data);
     
     const mac = data.MAC;
-    const type = data.type;
-    const status = data.status;
-    const clientUrl = data.clientUrl;
+    const rbt = robotRepository.getRobot(mac);
     let resp = null;
 
+    if(rbt) {
+      resp = {
+        responseRpcList : rbt.getRpcList()
+      }
+    }
+
+    return resp;
   }
-
-
-
-
 
 
 

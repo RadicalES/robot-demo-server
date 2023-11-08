@@ -3,10 +3,15 @@ const app = express();
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const corsOptions = require('./config/corsOptions');
+const simLatency = require('express-simulate-latency');
+const simLag = simLatency({ min: 500, max: 1000});
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
-const PORT = process.env.PORT || 3500;
+const config = require('./config/server.json');
+const PORT = config.server.port || process.env.PORT || 3500;
+const IPADDRESS = config.server.ipAddress || 'localhost';
 
 // custom middleware logger
 app.use(logger);
@@ -20,11 +25,17 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // To parse json data
 app.use(bodyParser.json());
 
+// To parse cookies
+app.use(cookieParser());
+
 // built-in middleware to handle urlencoded form data
 app.use(express.urlencoded({ extended: false }));
 
 // built-in middleware for json 
 app.use(express.json());
+
+// simulate network latency
+app.use(simLag);
 
 //serve static files
 app.use('/', express.static(path.join(__dirname, '/public')));
@@ -46,4 +57,4 @@ app.all('*', (req, res) => {
 
 app.use(errorHandler);
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, IPADDRESS, () => console.log(`Server running on port ${PORT} @ ${IPADDRESS}`));

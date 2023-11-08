@@ -1,0 +1,9 @@
+{
+  "locations" : [
+
+    { "tagName" : "Location 1", "barcode" : "1275005913" }, 
+    { "tagName" : "ColdBay A2", "barcode" : "8082275083515" }
+
+  ]
+
+}
