@@ -4,6 +4,7 @@ This is a reworked version from the original, which was mainly written for test 
 
 ## Status!
 Very much still a work in progress :)
+Add TypeScript & Prisma to the project
 
 ## Variants
 |Robot-T200|Robot-T201|Robot-T202|Robot-T203|
@@ -16,7 +17,6 @@ Very much still a work in progress :)
 * Robot-T420 QT application support
 
 ## Implementation Supported
-
 * Packer Terminals
 * Pallet Scales
 * Scanner Stations

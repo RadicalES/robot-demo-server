@@ -1,6 +1,10 @@
 {
   "server" : {
     "ipAddress" : "192.168.1.194",
-    "port" : 8086
+    "port" : 8080,
+    "latency" : {
+      "max" : 1000,
+      "min" : 100
+    }
   }
 }

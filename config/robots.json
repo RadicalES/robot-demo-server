@@ -1,10 +1,9 @@
 {
 
   "robots" : [
-
     {
-      "tagName" : "SOLAS Station 2",
-      "macAddress" : "00:60:35:16:E4:06",
+      "tagName" : "Raspberry PI Station",
+      "macAddress" : "E4:5F:01:50:EC:E0",
       "message" : "SOLAS Scale Ready!",
       "type" : "AUTO",
       "config" : { 
@@ -13,7 +12,7 @@
           "highLimit" : "1100.0",
           "security" : "OPEN",
           "units" : "kg",
-          "serverURL" : "http://192.168.1.194:8086/api/robots/scale"
+          "serverURL" : "http://192.168.1.194:8080/api/robots/scale"
       },
       "labels" : [
         {"B1" : "RED APPLES x 1"},
@@ -25,20 +24,31 @@
     },
 
     {
-      "tagName" : "Label Print Station",
-      "macAddress" : "00:60:35:24:42:85",
-      "message" : "Label printer ready",
+      "tagName" : "Label Print PC Station",
+      "macAddress" : "74:D0:2B:C5:2A:04",
+      "message" : "PC Scale ready!",
       "type" : "AUTO",
       "config" : { 
-        "type" : "DUALSCAN",
+        "type" : "SCALE",
         "security" : "OPEN",
-        "serverURL" : "http://192.168.1.194:8086/api/robots/label"
+        "serverURL" : "http://192.168.1.194:8080/api/robots/scan"
       },
       "rpcList" : [
         { "REM-PAL" : "Remove pallet" },
         { "EMPTY-PAL" : "Empty pallet" },
         { "DISC-PAL" : "Discard pallet" }
       ]
+    },
+    {
+      "tagName" : "Term Station",
+      "macAddress" : "80:34:28:61:50:42",
+      "message" : "Terminal Station Ready",
+      "type" : "AUTO",
+      "config" : { 
+        "type" : "TERMINAL",
+        "security" : "OPEN",
+        "serverURL" : "http://192.168.1.194:8080/api/robots/term"
+      }
     }
 
 

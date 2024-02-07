@@ -1,8 +1,13 @@
 
 const ROBOT_COMMANDS = require('../constants/ROBOT_COMMANDS');
 const robotServiceProcessor = require('../service/robots/RobotService');
+const { logd } = require('../utils/logger');
 
-const handleResponse = (res, data) => res.status(200).send(data);
+const TAG = "RobotController";
+
+const handleResponse = (res, data) => {
+  res.status(200).send(data);
+}
 
 const handleError = (res, err) => {
   const status = err?.status ?? 500;
@@ -33,7 +38,8 @@ const robotCntrlError = (req, res, next) => {
 
   try {
     const payload = req.body;
-    robotServiceProcessor({requestReset : { MAC : '00:00:00:00:00:00' }}, res, next);
+    const resMsg = robotServiceProcessor({requestReset : { MAC : '00:00:00:00:00:00' }}, res, next);
+    handleResponse(res, resMsg);
   }
   catch(error) {
     // error occured while handling the message
@@ -48,6 +54,7 @@ const robotCntrlSetupPost = (req, res, next) => {
     const payload = req.body;
     const resMsg = robotServiceProcessor(payload);
     if(resMsg) {
+      logd(TAG, "Setup Post", resMsg)
       handleResponse(res, resMsg);
     }
     else {
@@ -67,7 +74,21 @@ const robotCntrlSetupGet = (req, res, next) => {
 }
 
 const robotCntrlScanPost = (req, res, next) => {
-  res.json({});
+  try {
+    const payload = req.body;
+    const resMsg = robotServiceProcessor(payload);
+    if(resMsg) {
+      handleResponse(res, resMsg);
+    }
+    else {
+      // message not supported or not interpreted!
+      next();
+    }
+  }
+  catch(error) {
+    // server error, error occured while handling the message
+    handleError(res, error);
+  }
 }
 
 const robotCntrlScanGet = (req, res, next) => {
@@ -97,7 +118,21 @@ const robotCntrlLabelGet = (req, res, next) => {
 }
 
 const robotCntrlTerminalPost = (req, res, next) => {
-  res.json({});
+  try {
+    const payload = req.body;
+    const resMsg = robotServiceProcessor(payload);
+    if(resMsg) {
+      handleResponse(res, resMsg);
+    }
+    else {
+      // message not supported or not interpreted!
+      next();
+    }
+  }
+  catch(error) {
+    // server error, error occured while handling the message
+    handleError(res, error);
+  }
 }
 
 const robotCntrlTerminalGet = (req, res, next) => {
@@ -120,6 +155,24 @@ const robotCntrlForkliftPost = (req, res, next) => {
   res.json({});
 }
 
+const robotCntrlBootUrl = (req, res, next) => {
+  try {
+    const payload = req.body;
+    const resMsg = robotServiceProcessor(payload);
+    if(resMsg) {
+      handleResponse(res, resMsg);
+    }
+    else {
+      // message not supported or not interpreted!
+      next();
+    }
+  }
+  catch(error) {
+    // server error, error occured while handling the message
+    handleError(res, error);
+  }
+}
+
 
 module.exports = {
   robotCntrlPreProcess,
@@ -136,6 +189,7 @@ module.exports = {
   robotCntrlScaleGet,
   robotCntrlForkliftPost,
   robotCntrlForkliftSvrStatePost,
+  robotCntrlBootUrl,
   robotCntrlError
 }
 

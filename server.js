@@ -1,15 +1,17 @@
+const config = require('./config/server.json');
+const corsOptions = require('./config/corsOptions');
+
 const express = require('express');
 const app = express();
 const path = require('path');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
-const corsOptions = require('./config/corsOptions');
 const simLatency = require('express-simulate-latency');
-const simLag = simLatency({ min: 500, max: 1000});
+
+const simLag = simLatency({ min: config.server.latency.min, max: config.server.latency.max});
 const { logger } = require('./middleware/logEvents');
 const errorHandler = require('./middleware/errorHandler');
-const config = require('./config/server.json');
 const PORT = config.server.port || process.env.PORT || 3500;
 const IPADDRESS = config.server.ipAddress || 'localhost';
 
@@ -42,6 +44,7 @@ app.use('/', express.static(path.join(__dirname, '/public')));
 
 // routes
 app.use('/', require('./routes/root'));
+app.use('/', require('./routes/api/robotsBoot'));
 app.use('/api/robots/', require('./routes/api/robots'));
 
 app.all('*', (req, res) => {

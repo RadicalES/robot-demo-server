@@ -4,11 +4,9 @@ class StationResponse extends BaseResponse {
 
   constructor(mac, status, lcd1, lcd2, lcd3, lcd4, greenLED, orangeLED, redLED) {
     super(mac, status, lcd1, lcd2, lcd3, lcd4, greenLED, orangeLED, redLED);
-    console.log("RobotResponse const")
   }
 
   getResponse() {
-    console.log("Getting response")
     return {
       responseStation : {
         MAC : this.MAC,

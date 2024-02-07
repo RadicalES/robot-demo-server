@@ -1,0 +1,6 @@
+
+# Generate client code
+$>npx prisma generate
+
+# Migrate models
+$>npx prisma migrate

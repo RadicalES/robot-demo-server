@@ -112,10 +112,8 @@ class RobotService {
     const type = data.type;
     const status = data.status;
     const clientUrl = data.clientUrl;
-    let resp = null;
-
-
-
+    
+    return { MAC : mac, status: "OK"}
 
   }
 
@@ -129,7 +127,11 @@ class RobotService {
     const clientUrl = data.clientUrl;
     let resp = null;
 
-
+    return {
+      responsePong : {
+        MAC : mac
+      }
+    }
 
 
   }
@@ -153,7 +155,7 @@ class RobotService {
     const rbt = robotRepository.getRobot(mac);
     const barcode = data.barcode;
     const id = data.id;
-    const btn = data.value;
+    const btn = data.button;
     let lg = "false";
     let lo = "false";
     let lr = "false";
@@ -182,11 +184,11 @@ class RobotService {
       }
 
       const res = new StationResponse(mac, ROBOT_STATUS_CODES.STATUS_OK, 
-            "Button Pressed", btn, "Success", "Press next button", lg, lo, lg);
+            "Button Pressed", btn, "Success", "Press next button", lr, lo, lg);
       
-            logd(TAG, "Robot RESP", res);
+      // logd(TAG, "Robot RESP", res);
 
-            resp = res.getResponse();
+      resp = res.getResponse();
     }
 
     return resp;
@@ -197,13 +199,13 @@ class RobotService {
     logd(TAG, 'processBarcode', data);
     
     const mac = data.MAC;
-    const type = data.type;
-    const status = data.status;
-    const clientUrl = data.clientUrl;
-    let resp = null;
+    const barcode = data.barcode;
+    const id = data.id;
 
+    const res = new StationResponse(mac, ROBOT_STATUS_CODES.STATUS_OK, 
+      "Scan received!", barcode, id, "Scan next", "true", "true", "false");
 
-
+    return res.getResponse();
 
   }
 

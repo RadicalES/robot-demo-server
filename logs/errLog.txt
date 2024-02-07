@@ -1,5 +1,0 @@
-20231107	21:10:37	990048f6-efb7-46e6-a764-4b337ef0ceb2	TypeError: res.status is not a function
-20231108	08:04:12	394d309e-5a3b-4fa6-a1a9-ed659310e51c	TypeError: res.status is not a function
-20231108	08:16:01	02449e96-9106-4ff0-bb99-c3b9b793374e	TypeError: res.status is not a function
-20231108	08:16:24	af5e8e52-6d03-4b9e-a809-476f3822ba67	TypeError: res.status is not a function
-20231108	08:36:45	b9c4d4a8-ea76-45d6-8f64-8b8298786b59	ReferenceError: robotService is not defined

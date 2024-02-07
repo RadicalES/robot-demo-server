@@ -1,0 +1,74 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             Int      @id @default(autoincrement())
+  name           String
+  email          String?
+  username       String   @unique @db.VarChar(20)
+  emailConfirmed Boolean  @default(false)
+  preferences    Json
+  role           Role     @default(BASIC)
+  weights        Weight[]
+}
+
+model DeviceType {
+  id          Int       @id @default(autoincrement())
+  uuid        String    @default(uuid())
+  type        RobotType @default(ROBOT_T200)
+  name        String    @unique
+  description String?
+  deviceList  Device[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Device {
+  id     Int        @id @default(autoincrement())
+  uuid   String     @unique @default(uuid())
+  mac    String     @unique @db.VarChar(20)
+  type   DeviceType @relation(fields: [typeId], references: [id])
+  typeId Int        @unique
+
+  weights Weight[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([mac, uuid])
+}
+
+model Weight {
+  id        Int      @id @default(autoincrement())
+  value     Float
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  device    Device   @relation(fields: [deviceId], references: [id])
+  deviceId  Int
+}
+
+enum Role {
+  BASIC
+  OPERATOR
+  ADMIN
+  SUPER
+}
+
+enum RobotType {
+  ROBOT_T200
+  ROBOT_T201
+  ROBOT_T202
+  ROBOT_T420
+  ROBOT_T430
+}
