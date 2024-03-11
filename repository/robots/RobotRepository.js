@@ -27,7 +27,12 @@ class RobotRepository {
   }
 
   findConfigByMacAddress(macAddress) {
-    return robotConfigList.robots.find((r) => r.macAddress === macAddress);
+    var rbt = robotConfigList.robots.find((r) => r.macAddress === macAddress);
+    if(!rbt) {
+      rbt = robotConfigList.robots.find((r) => r.macAddress === 'FF:FF:FF:FF:FF:FF');
+    }
+
+    return rbt;
   }
 
   findConfigByMacAddressAndType(macAddress, type) {

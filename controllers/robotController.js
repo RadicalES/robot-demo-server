@@ -152,7 +152,22 @@ const robotCntrlForkliftSvrStatePost = (req, res, next) => {
 }
 
 const robotCntrlForkliftPost = (req, res, next) => {
-  res.json({});
+  try {
+    const payload = req.body;
+    const resMsg = robotServiceProcessor(payload);
+    if(resMsg) {
+      logd(TAG, "Forklift Post", resMsg)
+      handleResponse(res, resMsg);
+    }
+    else {
+      // message not supported or not interpreted!
+      next();
+    }
+  }
+  catch(error) {
+    // server error, error occured while handling the message
+    handleError(res, error);
+  }
 }
 
 const robotCntrlBootUrl = (req, res, next) => {

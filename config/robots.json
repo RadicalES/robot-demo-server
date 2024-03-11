@@ -24,14 +24,14 @@
     },
 
     {
-      "tagName" : "Label Print PC Station",
+      "tagName" : "Stock Movement Vechicle - F1",
       "macAddress" : "74:D0:2B:C5:2A:04",
-      "message" : "PC Scale ready!",
+      "message" : "Forklift Ready! Press Any Button...",
       "type" : "AUTO",
       "config" : { 
-        "type" : "SCALE",
+        "type" : "FORKLIFT",
         "security" : "OPEN",
-        "serverURL" : "http://192.168.1.194:8080/api/robots/scan"
+        "serverURL" : "http://192.168.1.194:8080/api/robots/forklift"
       },
       "rpcList" : [
         { "REM-PAL" : "Remove pallet" },
@@ -41,13 +41,24 @@
     },
     {
       "tagName" : "Term Station",
-      "macAddress" : "80:34:28:61:50:42",
+      "macAddress" : "80:34:28:61:50:44",
       "message" : "Terminal Station Ready",
       "type" : "AUTO",
       "config" : { 
         "type" : "TERMINAL",
         "security" : "OPEN",
         "serverURL" : "http://192.168.1.194:8080/api/robots/term"
+      }
+    },
+    {
+      "tagName" : "Default Station",
+      "macAddress" : "FF:FF:FF:FF:FF:FF",
+      "message" : "Default Station Ready",
+      "type" : "AUTO",
+      "config" : { 
+        "type" : "DUALSCAN",
+        "security" : "OPEN",
+        "serverURL" : "http://192.168.1.194:8080/api/robots/scan"
       }
     }
 

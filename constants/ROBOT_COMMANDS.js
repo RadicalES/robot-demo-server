@@ -14,6 +14,7 @@ const ROBOT_COMMANDS = {
   PUB_KEYPAD_CODE : 'publishKeypadCode',
   PUB_PRINT_LABEL : 'publishPrintLabel',
   PUB_SCALE_WEIGHT : 'publishScaleWeight',
+  PUB_PALLET_STORE : 'publishPalletStore',
 
 };
 

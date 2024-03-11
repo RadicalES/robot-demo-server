@@ -259,14 +259,15 @@ class RobotService {
     logd(TAG, 'processLogon', data);
     
     const mac = data.MAC;
-    const type = data.type;
+    const id = data.id;
     const status = data.status;
-    const clientUrl = data.clientUrl;
+    const session = data.session;
     let resp = null;
 
+    const res = new StationResponse(mac, ROBOT_STATUS_CODES.STATUS_OK, 
+      "User Logged On: " + id, "Session: " + session, "", "", "true", "false", "false");
 
-
-
+    return res.getResponse();
   }
 
   processLogoff(data) {
@@ -274,14 +275,34 @@ class RobotService {
     logd(TAG, 'processLogoff', data);
     
     const mac = data.MAC;
-    const type = data.type;
     const status = data.status;
-    const clientUrl = data.clientUrl;
+    const session = data.session;
     let resp = null;
 
+    const res = new StationResponse(mac, ROBOT_STATUS_CODES.STATUS_OK, 
+      "User Logged Off" , "Session: " + session, "", "", "true", "false", "false");
 
+    return res.getResponse();
+  }
 
+  processPalletStore(data) {
+    
+    logd(TAG, 'processPalletStore', data);
+    
+    const mac = data.MAC;
+    const status = data.status;
+    const dest = data.destination;
+    const loc = data.location;
+    const session = data.session;
+    const barcode = data.barcode;
+    const id = data.id;
+    const rbt = robotRepository.getRobot(mac);
+    let resp = null;
 
+    const res = new StationResponse(mac, ROBOT_STATUS_CODES.STATUS_OK, 
+      "Pallet Stored: " + barcode, "From: " + loc, "To: " + dest, "By: " + id, "true", "false", "false");
+
+    return res.getResponse();
   }
 
 
@@ -375,6 +396,10 @@ const robotServiceProcessor = (payload) => {
 
     case ROBOT_COMMANDS.PUB_PRINT_LABEL:
       resMsg = robotService.processPrintLabel(data);
+      break;
+
+    case ROBOT_COMMANDS.PUB_PALLET_STORE:
+      resMsg = robotService.processPalletStore(data);
       break;
 
   }
