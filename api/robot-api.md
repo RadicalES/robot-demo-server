@@ -234,6 +234,7 @@ On boot the server must provide important information to the Robot. Various sett
 ```
 
 ### Server Response Setup
+<p>lightsOnTime is only support by the T202 firmware 2.2.1 and later.</p>
 ```JSON
 {
 
@@ -254,7 +255,8 @@ On boot the server must provide important information to the Robot. Various sett
         "type" : "DISABLED/AUTO/TERMINAL/SCALE/SCANNER/BINTIP/FORKLIFT/DUALSCAN/LABELPRINT",
         "serverURL" : "http://192.168.0.1/scale.cgi",
         "signOnUsername" : "JWT etc",
-        "signOnPassword" : ""
+        "signOnPassword" : "",
+        "lightsOnTime" : "20"
     }
  
 }

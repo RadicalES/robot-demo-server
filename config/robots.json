@@ -58,7 +58,8 @@
       "config" : { 
         "type" : "DUALSCAN",
         "security" : "OPEN",
-        "serverURL" : "http://192.168.1.194:8080/api/robots/scan"
+        "serverURL" : "http://192.168.1.194:8080/api/robots/scan",
+        "lightsOnTime" : "20"
       }
     }
 

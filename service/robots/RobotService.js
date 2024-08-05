@@ -62,7 +62,8 @@ class RobotService {
             type : rbt.config.type,
             protocol : ROBOT_API_TYPES.API_TYPE_ROBOT,
             session : robotRepository.getNewSession(),
-            serverURL : rbt.config.serverURL
+            serverURL : rbt.config.serverURL,
+            lightsOnTime : rbt.config.lightsOnTime
           }
         
         }
