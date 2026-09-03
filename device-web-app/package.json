@@ -1,0 +1,22 @@
+{
+  "name": "device-webapp-template",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A starting point for a terminal web app: card reader, barcode scanner and scale, and a test server to post to.",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "manifest": "node manifest.js",
+    "bundle": "vite build && node manifest.js && tar czf dist-bundle.tar.gz -C dist .",
+    "server": "node test-server/server.js"
+  },
+  "dependencies": {
+    "vue": "^3.5.32"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "express": "^4.21.2",
+    "vite": "^6.0.7"
+  }
+}

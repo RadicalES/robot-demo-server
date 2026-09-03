@@ -1,0 +1,91 @@
+/* A terminal is read standing up, at arm's length, sometimes with gloves on:
+   big text, big buttons. That is the whole of the styling. */
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: #14171c;
+  color: #f2f4f7;
+  font-family: system-ui, sans-serif;
+  font-size: 18px;
+}
+
+.app { max-width: 700px; margin: 0 auto; }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  border-bottom: 2px solid #e8710a;
+  padding-bottom: 10px;
+}
+h1 { font-size: 22px; margin: 0; }
+
+.lamps { font-size: 14px; color: #98a2b3; }
+.lamp {
+  display: inline-block;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #d64545;
+  margin: 0 4px 0 12px;
+}
+.lamp.on { background: #2e9e4f; }
+
+section {
+  background: #1e232b;
+  border: 1px solid #2c333d;
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+h2 { font-size: 15px; text-transform: uppercase; margin: 0 0 8px; color: #98a2b3; }
+
+.big { font-size: 30px; font-weight: 700; margin: 0 0 14px; word-break: break-all; }
+
+button {
+  font: inherit;
+  font-weight: 600;
+  padding: 12px 20px;
+  margin-right: 8px;
+  border: 0;
+  border-radius: 6px;
+  background: #e8710a;
+  color: #fff;
+}
+button:disabled { opacity: .4; }
+button.quiet { background: #39424f; }
+
+.ok { color: #2e9e4f; }
+.bad { color: #d64545; }
+.problem {
+  background: #3a2a12;
+  border: 1px solid #e8710a;
+  border-radius: 6px;
+  padding: 12px;
+}
+
+/* The banner. Loud on purpose - this app is a starting point, and it will be
+   installed on terminals that also run the real one. */
+.demo {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  background: #e8710a;
+  color: #14171c;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* Enrolling an unknown card. Set apart, because it only appears when something
+   has gone wrong and should not look like part of the normal screen. */
+.enrol { margin-top: 14px; padding-top: 14px; border-top: 1px solid #2c333d; }
+.enrol p { margin: 0 0 8px; color: #98a2b3; font-size: 15px; }
+.enrol select {
+  font: inherit; padding: 10px; margin-right: 8px;
+  border-radius: 6px; border: 1px solid #2c333d;
+  background: #14171c; color: #f2f4f7;
+}

@@ -1,0 +1,7 @@
+{
+  "name": "Bench",
+  "type": "TERMINAL",
+  "serverURL": "",
+  "transactionURL": "http://localhost:8099/",
+  "deviceWebAppVersion": "dev"
+}
