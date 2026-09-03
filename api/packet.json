@@ -1,222 +1,235 @@
 {
-    "__doc__" : "Robot T200/T400 JSON API",
+    "__doc__": "Robot T200/T400 JSON API",
     "__copy__": "(C) 2023, Radical Electronic Systems",
-    "__revision__" : "Revision 1G",
-
-    "requestInformation" : {
-        "MAC" : "AA:BB:CC:00:11:22:"
+    "__revision__": "Revision 1H",
+    "requestInformation": {
+        "MAC": "AA:BB:CC:00:11:22:"
     },
-
-    "responseInformation" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "hardware" : "1a",
-        "software" : "1.0.1",
-        "type"     : "ROBOT-T201",
-        "uptime"   : "1000"
+    "responseInformation": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "hardware": "1a",
+        "software": "1.0.1",
+        "type": "ROBOT-T201",
+        "uptime": "1000"
     },
-
-    "requestReset" : {
-        "MAC" : "AA:BB:CC:00:11:22"
+    "requestReset": {
+        "MAC": "AA:BB:CC:00:11:22"
     },
-    
-    "requestPing" : {
-        "MAC" : "AA:BB:CC:00:11:22"
+    "requestPing": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "session": "0123456789abcdef",
+        "firmware": "ITPC200-COCPU-1.3-7d2ada55",
+        "deviceWebApp": "1.3.46",
+        "rootfs": "T430-R5H"
     },
-
-    "responsePong" : {
-        "MAC" : "AA:BB:CC:00:11:22"
+    "responsePong": {
+        "MAC": "AA:BB:CC:00:11:22"
     },
-
-    "requestDateTime" : {
-        "MAC"  : "AA:BB:CC:00:11:22"
+    "requestDateTime": {
+        "MAC": "AA:BB:CC:00:11:22"
     },
-
-    "responseDateTime" : {
-        "status" : "OK/FAIL/ERROR",
-        "MAC" : "AA:BB:CC:00:11:22",
-        "date" : "yyyy-mm-dd",
-        "time" : "12:00:00"
+    "responseDateTime": {
+        "status": "OK/FAIL/ERROR",
+        "MAC": "AA:BB:CC:00:11:22",
+        "date": "yyyy-mm-dd",
+        "time": "12:00:00"
     },
-
-    "requestStatus" : {
-        "MAC" : "AA:BB:CC:00:11:22"
+    "requestStatus": {
+        "MAC": "AA:BB:CC:00:11:22"
     },
-
-    "publishStatus" : {
-        "status" : "READY/!READY",
-        "system" : "ENGINE/SCALE/SCANNER",
-        "message" : "Descriptive message when in error",
-        "MAC" : "AA:BB:CC:00:11:22",
-        "session" : "0123456789abcdef"
+    "publishStatus": {
+        "status": "READY/!READY",
+        "system": "ENGINE/SCALE/SCANNER",
+        "message": "Descriptive message when in error",
+        "MAC": "AA:BB:CC:00:11:22",
+        "session": "0123456789abcdef"
     },
-    
-    "publishScaleWeight" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "barcode" : "0123456789abcdef",
-        "weight" : "1100.00",
-        "units" : "kg/NOT-SET",
-        "status" : "NORMAL/OVERRIDE/UNDER/OVER",
-        "session" : "0123456789abcdef"
+    "publishScaleWeight": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "barcode": "0123456789abcdef",
+        "weight": "1100.00",
+        "units": "kg/NOT-SET",
+        "status": "NORMAL/OVERRIDE/UNDER/OVER",
+        "session": "0123456789abcdef"
     },
-
-    "requestPalletMove" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "barcode" : "0123456789abcdef",
-        "status" : "REQUEST",
-        "session" : "0123456789abcdef",
-        "location" : "Current Location"
+    "requestPalletMove": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "barcode": "0123456789abcdef",
+        "status": "REQUEST",
+        "session": "0123456789abcdef",
+        "location": "Current Location"
     },
-
-    "requestRpcList" : {
-        "MAC" : "AA:BB:CC:00:11:22"
+    "requestRpcList": {
+        "MAC": "AA:BB:CC:00:11:22"
     },
-
-    "responseRpcList": 
-    [
-        { "REM-PAL": "Remove current pallet" },
-        { "LOD-PAL": "Load existing pallet" },
-        { "REM-BOX": "Remove carton from pallet" },
-        { "FIND-PAL": "Find pallet" },
-        { "REST-PAL": "Restore pallet" },
-        { "REBUILD-PAL": "Rebuild pallet" },
-        { "LOOK-BOX": "Lookup carton" }
+    "responseRpcList": [
+        {
+            "REM-PAL": "Remove current pallet"
+        },
+        {
+            "LOD-PAL": "Load existing pallet"
+        },
+        {
+            "REM-BOX": "Remove carton from pallet"
+        },
+        {
+            "FIND-PAL": "Find pallet"
+        },
+        {
+            "REST-PAL": "Restore pallet"
+        },
+        {
+            "REBUILD-PAL": "Rebuild pallet"
+        },
+        {
+            "LOOK-BOX": "Lookup carton"
+        }
     ],
-
     "requestRpcExecute": {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "session" : "0123456789abcdef",
-        "id" : "0",
-        "barcode" : "0123456789abcdef",
+        "MAC": "AA:BB:CC:00:11:22",
+        "session": "0123456789abcdef",
+        "id": "0",
+        "barcode": "0123456789abcdef",
         "call": "EXECUTE",
         "status": "NORMAL"
     },
-
-    "publishPalletStore" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "barcode" : "0123456789abcdef",
-        "status" : "REQUEST",
-        "session" : "0123456789abcdef",
-        "location" : "Current Location",
-        "destination" : "New Location"
+    "publishPalletStore": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "barcode": "0123456789abcdef",
+        "status": "REQUEST",
+        "session": "0123456789abcdef",
+        "location": "Current Location",
+        "destination": "New Location"
     },
-
-    "publishBarcodeScan" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "barcode" : "0123456789abcdef",
-        "session" : "0123456789abcdef",
-        "status" : "NORMAL/ENTERED"
+    "publishBarcodeScan": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "barcode": "0123456789abcdef",
+        "session": "0123456789abcdef",
+        "status": "NORMAL/ENTERED"
     },
-
-    "publishPrintLabel" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "option" : "0123456789abcdef",
-        "session" : "0123456789abcdef",
-        "status" : "NORMAL"
+    "publishPrintLabel": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "option": "0123456789abcdef",
+        "session": "0123456789abcdef",
+        "status": "NORMAL"
     },
-
-    "requestSetup" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "type" : "SOLAS-Scale",
-        "status" : "REQUEST/ACCEPT",
-        "clientURL" : "http://robot-ip/control.cgi"
+    "requestSetup": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "type": "SOLAS-Scale",
+        "status": "REQUEST/ACCEPT",
+        "platform": "linux",
+        "model": "ROBOT-T430",
+        "firmware": "ITPC200-COCPU-1.3-7d2ada55",
+        "deviceWebApp": "1.3.46",
+        "rootfs": "T430-R5H",
+        "clientURL": "http://robot-ip/control.cgi",
+        "controlURL": "http://robot-ip:8080/control",
+        "VNC": "192.168.0.50:5900"
     },
-
-    "responseSetup" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "status" : "ENABLED/DISABLED",
-        "lowLimit" : "850",
-        "highLimit" : "1150",
-        "units" : "kg",
-        "name" : "Weighbridge 1",
-        "security" : "OPEN/REQUIRED",
-        "protocol" : "ROBOT-API",
-        "scale" : "MICRO-A12E",
-        "message" : "IDLE MESSAGE",
-        "session" : "0123456789abcdef",
-        "date" : "yyyy-mm-dd",
-        "time" : "12:00:00",
-        "type" : "DISABLED/AUTO/TERMINAL/SCALE/SCANNER/BINTIP/FORKLIFT/DUALSCAN/LABELPRINT",
-        "serverURL" : "http://192.168.0.1/scale.cgi",
-        "signOnUsername" : "JWT etc",
-        "signOnPassword" : ""
-    },    
-
-    "publishLogon" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "session" : "0123456789abcdef"
+    "responseSetup": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "status": "ENABLED/DISABLED",
+        "lowLimit": "850",
+        "highLimit": "1150",
+        "units": "kg",
+        "name": "Weighbridge 1",
+        "security": "OPEN/REQUIRED",
+        "protocol": "ROBOT-API",
+        "scale": "MICRO-A12E",
+        "message": "IDLE MESSAGE",
+        "session": "0123456789abcdef",
+        "date": "yyyy-mm-dd",
+        "time": "12:00:00",
+        "type": "DISABLED/AUTO/TERMINAL/SCALE/SCANNER/BINTIP/FORKLIFT/DUALSCAN/LABELPRINT",
+        "serverURL": "http://192.168.0.1/scale.cgi",
+        "signOnUsername": "JWT etc",
+        "signOnPassword": ""
     },
-
-    "publishLogoff" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "session" : "0123456789abcdef"
+    "publishLogon": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "session": "0123456789abcdef"
     },
-
-    "publishButton" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "id" : "0123456789abcdef",
-        "value" : "B1/B2/B3/B4/B5/B6",
-        "session" : "0123456789abcdef"
+    "publishLogoff": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "session": "0123456789abcdef"
     },
-
-    "responseKeypad" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "status" : "OK",
-        "LCD1" : "Enter password",
-        "LCD2" : "Press enter",
-        "LCD3" : "",
-        "LCD4" : "",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
-    },    
-
-    "responseStation" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "status" : "OK/FAIL/DENIED/LOGOFF",
-        "LCD1" : "Pallet OK",
-        "LCD2" : "#1001010",
-        "LCD3" : "Weight:",
-        "LCD4" : "1000.0 kg",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
+    "publishButton": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "value": "B1/B2/B3/B4/B5/B6",
+        "session": "0123456789abcdef"
     },
-
-    "responseUser" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "status" : "OK",
-        "LCD1" : "Pallet OK",
-        "LCD2" : "#1001010",
-        "LCD3" : "Weight:",
-        "LCD4" : "1000.0 kg",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
+    "responseKeypad": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "status": "OK",
+        "LCD1": "Enter password",
+        "LCD2": "Press enter",
+        "LCD3": "",
+        "LCD4": "",
+        "Green": "true/false",
+        "Orange": "true/false",
+        "Red": "true/false"
     },
-
-    "responseKeypad" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "status" : "OK",
-        "LCD1" : "Enter password",
-        "LCD2" : "Press enter",
-        "LCD3" : "",
-        "LCD4" : "",
-        "Green" : "true/false",
-        "Orange" : "true/false",
-        "Red" : "true/false"
+    "responseStation": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "status": "OK/FAIL/DENIED/LOGOFF",
+        "LCD1": "Pallet OK",
+        "LCD2": "#1001010",
+        "LCD3": "Weight:",
+        "LCD4": "1000.0 kg",
+        "Green": "true/false",
+        "Orange": "true/false",
+        "Red": "true/false"
     },
-
-    "payloadType" : {
-        "propertyName" : "propertyValue",
-        "subObject" : {
-            "subProperyName" : "subPropertyValue"
+    "responseUser": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "status": "OK",
+        "LCD1": "Pallet OK",
+        "LCD2": "#1001010",
+        "LCD3": "Weight:",
+        "LCD4": "1000.0 kg",
+        "Green": "true/false",
+        "Orange": "true/false",
+        "Red": "true/false"
+    },
+    "payloadType": {
+        "propertyName": "propertyValue",
+        "subObject": {
+            "subProperyName": "subPropertyValue"
         }
+    },
+    "responseDeviceWebApp": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "status": "SUCCESS",
+        "message": "New device web app available",
+        "deviceWebApp": {
+            "uuid": "5f627f2c-0328-4c14-a186-8243e5a858f9",
+            "name": "robot-device-webapp-1.3.46.tar.gz",
+            "slug": "device-webapp",
+            "version": "1.3.46",
+            "size": 142321,
+            "download_url": "http://server:8080/media/firmware/robot-device-webapp-1.3.46.tar.gz",
+            "md5_checksum": "8293baae0e99999275cdc6410d95fe55",
+            "sha256_checksum": "1dcf1e797ad478957a97f11d00da9082c241dc64776d3935ec613b285528309d",
+            "is_latest": true
+        }
+    },
+    "requestRootfsUpdate": {
+        "manifest": "ITPC200-R3F",
+        "password": "the overlay password",
+        "force": false
+    },
+    "publishRootfsUpdate": {
+        "MAC": "AA:BB:CC:00:11:22",
+        "manifest": "ITPC200-R3F",
+        "status": "STARTED/REFUSED",
+        "reason": "already on ITPC200-R3F"
     }
 }
