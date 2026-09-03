@@ -1,35 +1,23 @@
 {
-  "name": "robot-demo-server-new",
+  "name": "robot-demo-server",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A ROBOT-API server in TypeScript, small enough to read",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "dbtest": "nodemon prisma/tests/test1.ts"
+    "build": "tsc",
+    "start": "npm run build && node dist/index.js",
+    "dev": "tsx watch src/index.ts",
+    "typecheck": "tsc --noEmit"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.9.1",
-    "body-parser": "^1.20.2",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "csv-writer": "^1.6.0",
-    "date-fns": "^2.30.0",
-    "express": "^4.18.2",
-    "express-simulate-latency": "^0.0.2",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.43",
-    "morgan": "^1.10.0",
-    "uuid": "^9.0.1",
-    "xml": "^1.0.1"
+    "express": "^4.21.2"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "nodemon": "^3.0.3",
-    "prisma": "^5.9.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
   }
 }

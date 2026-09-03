@@ -1,6 +1,0 @@
-export enum ROBOT_STATUS_CODES {
-  STATUS_OK = 'OK',
-  STATUS_REQUEST = 'REQUEST',
-  STATUS_FAIL = 'FAIL',
-   
-};
