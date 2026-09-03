@@ -5,7 +5,8 @@
   "main": "httpserver.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon httpserver.js"
+    "start": "nodemon httpserver.js",
+    "robot-server": "node robot-server.js"
   },
   "author": "Jan Zwiegers",
   "license": "ISC",
