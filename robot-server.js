@@ -49,9 +49,21 @@ app.use((req, res, next) => {
 // One URL. The command is in the message, not in the path - which is what
 // lets a Robot with one configured URL do everything it does.
 app.post('/robot/api/', (req, res) => {
-  const answer = protocol.handle(req.body, server)
-  res.json(answer)
+  res.json(protocol.handle(req.body, server))
 })
+
+// The same handler on the paths Robots were configured with years ago.
+//
+// The path never carried any meaning: a Robot posted to /scale.cgi and the
+// server read the command out of the message anyway. They are mounted here so
+// a Robot in a packhouse, holding a URL somebody typed into it once, keeps
+// working - not because there is anything behind them.
+for (const legacy of ['/setup.cgi', '/scale.cgi', '/term.cgi', '/scan.cgi',
+                      '/label.cgi', '/forklift.cgi', '/forklift-sss.cgi']) {
+  app.post(legacy, (req, res) => {
+    res.json(protocol.handle(req.body, server))
+  })
+}
 
 // What the dashboard reads. Three small answers rather than one big one, so a
 // page can ask for the part that changes without re-reading the part that does
