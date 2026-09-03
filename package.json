@@ -1,35 +1,22 @@
 {
-  "name": "robot-demo-server-new",
+  "name": "device-webapp-template",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "type": "module",
+  "description": "A starting point for a terminal web app: card reader, barcode scanner and scale, and a test server to post to.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js",
-    "dbtest": "nodemon prisma/tests/test1.ts"
+    "dev": "vite",
+    "build": "vite build",
+    "manifest": "node manifest.js",
+    "bundle": "vite build && node manifest.js && tar czf dist-bundle.tar.gz -C dist .",
+    "server": "node test-server/server.js"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@prisma/client": "^5.9.1",
-    "body-parser": "^1.20.2",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "csv-writer": "^1.6.0",
-    "date-fns": "^2.30.0",
-    "express": "^4.18.2",
-    "express-simulate-latency": "^0.0.2",
-    "moment": "^2.29.4",
-    "moment-timezone": "^0.5.43",
-    "morgan": "^1.10.0",
-    "uuid": "^9.0.1",
-    "xml": "^1.0.1"
+    "vue": "^3.5.32"
   },
   "devDependencies": {
-    "@types/node": "^20.11.16",
-    "nodemon": "^3.0.3",
-    "prisma": "^5.9.1",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.3.3"
+    "@vitejs/plugin-vue": "^5.2.1",
+    "express": "^4.21.2",
+    "vite": "^6.0.7"
   }
 }

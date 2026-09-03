@@ -1,6 +1,0 @@
-node_modules/
-dist/
-dist-bundle.tar.gz
-# Cards enrolled while demonstrating. Whoever is showing the terminals should
-# not inherit the cards from whoever showed them last.
-test-server/cards.json
