@@ -1,0 +1,34 @@
+/* Read on a laptop beside a terminal, so: plain, dense, and no colour doing
+   work that words should do. */
+
+body {
+  margin: 0;
+  padding: 20px;
+  background: #14171c;
+  color: #e7eaee;
+  font-family: system-ui, sans-serif;
+  font-size: 15px;
+}
+
+.page { max-width: 1000px; margin: 0 auto; }
+
+header {
+  display: flex; justify-content: space-between; align-items: baseline;
+  border-bottom: 2px solid #e8710a; padding-bottom: 10px;
+}
+h1 { font-size: 20px; margin: 0; }
+.state { font-size: 13px; color: #2e9e4f; }
+.state.bad { color: #d64545; }
+
+section { margin-top: 22px; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: #98a2b3; margin: 0 0 4px; }
+.hint { margin: 0 0 10px; color: #6b7280; font-size: 13px; }
+
+table { width: 100%; border-collapse: collapse; }
+td { padding: 6px 10px 6px 0; border-bottom: 1px solid #232932; vertical-align: top; }
+.mac, .cmd { font-family: ui-monospace, monospace; white-space: nowrap; }
+.cmd { color: #e8710a; }
+.quiet { color: #7d8794; }
+
+.line { font-family: ui-monospace, monospace; font-size: 13px; padding: 2px 0; }
+code { background: #232932; padding: 0 .3em; border-radius: 3px; }

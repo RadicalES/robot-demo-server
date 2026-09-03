@@ -106,3 +106,6 @@ dist
 # Not tracked: this is a demonstration server that is installed fresh, and a
 # lockfile committed here pins versions nobody is choosing on purpose.
 package-lock.json
+web/dist
+dist-bundle.tar.gz
+dist

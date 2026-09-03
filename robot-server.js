@@ -19,6 +19,8 @@
 'use strict'
 
 const express = require('express')
+const path = require('path')
+const fs = require('fs')
 const protocol = require('./protocol')
 const { DemoServer } = require('./protocol/state')
 
@@ -51,9 +53,26 @@ app.post('/robot/api/', (req, res) => {
   res.json(answer)
 })
 
+// What the dashboard reads. Three small answers rather than one big one, so a
+// page can ask for the part that changes without re-reading the part that does
+// not.
+app.get('/api/robots', (req, res) => res.json({ robots: server.summary() }))
+app.get('/api/commands', (req, res) => res.json({ commands: protocol.describe() }))
+app.get('/api/recent', (req, res) => res.json({ recent: server.recent }))
+
+// The dashboard itself, when it has been built. Without it the server still
+// works and still answers Robots - a front end that has not been built is not
+// a reason for a terminal to stop being able to sign somebody on.
+const dashboard = path.join(__dirname, 'web', 'dist')
+if (fs.existsSync(path.join(dashboard, 'index.html'))) {
+  app.use(express.static(dashboard))
+} else {
+  console.log('No dashboard built (npm run web:build) - the API still works.')
+}
+
 // What this server understands, from the same table that implements it - so
 // the list cannot describe a command the server does not have.
-app.get('/', (req, res) => {
+app.get('/plain', (req, res) => {
   const rows = protocol
     .describe()
     .map((p) => `  ${p.name.padEnd(22)} -> ${(p.answers || '(nothing)').padEnd(22)} ${p.summary}`)

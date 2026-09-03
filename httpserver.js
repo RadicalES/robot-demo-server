@@ -18,7 +18,9 @@ app.use(express.json());
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// The dashboard is a Vite build now (npm run web:build), not a hand-written
+// page with jQuery and Bootstrap vendored beside it.
+app.use(express.static(path.join(__dirname, 'web', 'dist')));
 app.use(simLag);
 
 

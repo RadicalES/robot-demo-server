@@ -53,10 +53,29 @@ class DemoServer {
     }
 
     this.sessions = 0
+
+    // The last few things that happened, so the dashboard can show the
+    // conversation rather than a person having to watch a terminal window.
+    this.recent = []
   }
 
   log(line) {
-    console.log(`${new Date().toTimeString().slice(0, 8)}  ${line}`)
+    const at = new Date().toTimeString().slice(0, 8)
+    console.log(`${at}  ${line}`)
+    this.recent.unshift({ at, line })
+    this.recent = this.recent.slice(0, 100)
+  }
+
+  // What the dashboard shows: every Robot this server knows, what it has
+  // reported about itself, and who is signed on at it.
+  summary() {
+    return [...this.robots.values()].map((r) => ({
+      mac: r.mac,
+      name: r.setup.name || '',
+      type: r.setup.type || '',
+      versions: r.versions,
+      operator: r.operator ? r.operator.name : null,
+    }))
   }
 
   findRobot(mac) {
