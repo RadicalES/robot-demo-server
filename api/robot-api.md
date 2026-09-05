@@ -461,6 +461,32 @@ what settles which release a terminal is on is the `rootfs` field in its next
 }
 ```
 
+#### Publish an Intake Tip - INTAKE PROFILE - FUTURE SUPPORT
+> **Future support.** Not yet implemented on the server or firmware. Reserved here as part of the spec.
+
+Records a single tip of fruit at the infeed (a bin tipper or pre-sort line). Sent once per tip by a terminal configured with the `INTAKE` profile. The terminal never names a run - the server feeds whatever run is open on the terminal's line.
+
+Everything except `MAC` is optional, so the same command serves a line that scans the bin, one that weighs it, and one that only counts:
+- `id` - the operator's key card, resolved as in `publishLogon`.
+- `barcode` - the bin's SSCC/id. Omitted on a count-only line.
+- `weight` - mass tipped in kg. Omitted where the line does not weigh; the bin's known mass then stands.
+- `transactionId` - a UUID for the tip so a retry over a flaky link is not double-counted; the server replays the first answer for a repeated id.
+
+```JSON
+{
+    "publishIntake" : {
+        "MAC" : "AA:BB:CC:00:11:22",
+        "id" : "0123456789abcdef",
+        "barcode" : "0123456789abcdef",
+        "weight" : "297.00",
+        "session" : "0123456789abcdef",
+        "transactionId" : "6f9c2e2c-1b7a-4f0e-9a1a-2c9d4e5f6a7b"
+    }
+}
+```
+
+The response is a standard `responseStation`: on a tip, green with the run's running tip count and mass on `LCD4`; on a refusal (unknown or empty bin, no open run, run closed, bad weight) orange/red with the reason, and the tip is not counted.
+
 #### Move a Pallet - FORKLIFT PROFILE
 To move a pallet two commands are needed. First is to request the move, which verifies the pallet location. The second is to publish the new position.
 

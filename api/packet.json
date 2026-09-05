@@ -44,6 +44,15 @@
         "MAC": "AA:BB:CC:00:11:22",
         "session": "0123456789abcdef"
     },
+    "publishIntake": {
+        "__status__": "FUTURE-SUPPORT",
+        "MAC": "AA:BB:CC:00:11:22",
+        "id": "0123456789abcdef",
+        "barcode": "0123456789abcdef",
+        "weight": "297.00",
+        "session": "0123456789abcdef",
+        "transactionId": "6f9c2e2c-1b7a-4f0e-9a1a-2c9d4e5f6a7b"
+    },
     "publishScaleWeight": {
         "MAC": "AA:BB:CC:00:11:22",
         "id": "0123456789abcdef",
