@@ -185,6 +185,25 @@ app.post('/api/v1/transact/scale/', (req, res) => {
   slow(res, { status: 'OK', message: `Recorded ${weight} ${units || ''}`.trim(), weight })
 })
 
+// A LABELPRINT terminal asks for a label and prints what it is given. The
+// number is the server's to allocate - a terminal that made up its own would
+// print the same one twice the moment two terminals ran at once.
+let labels = 0
+
+app.post('/api/v1/transact/label/', (req, res) => {
+  const { kind, terminal } = req.body || {}
+  if (!sessions.has(terminal || 'unknown')) {
+    return slow(res, { status: 'REFUSED', message: 'Nobody is signed on at this terminal' }, 409)
+  }
+  if (!['PALLET', 'CARTON', 'BIN'].includes(kind)) {
+    return slow(res, { status: 'REFUSED', message: `${kind || 'That'} is not a label this station prints` }, 400)
+  }
+  const label = `${kind}-${String(++labels).padStart(5, '0')}`
+  captured.push({ kind: 'label', label, ...req.body })
+  console.log(`label   ${terminal || '?'}  ${label}`)
+  slow(res, { status: 'OK', message: `Printed ${label}`, label })
+})
+
 // What it has been told, for looking at while testing.
 app.get('/api/v1/transact/captured/', (req, res) => res.json({ status: 'OK', captured }))
 

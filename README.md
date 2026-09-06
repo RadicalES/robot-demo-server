@@ -111,11 +111,55 @@ of which belongs in the first thing you read.
 
 ## How a terminal talks to this app
 
-**Configuration** arrives in `config.json` beside the app: the terminal's name,
-its function, the SCADA server's URL and the transaction URL. The terminal
-writes it — `robot-scada-client` when a SCADA server provisions the terminal,
-or the terminal's own web UI when it runs standalone. The same file either way,
-so an app cannot tell which configured it.
+**Configuration** arrives in `config.json`. The terminal writes it —
+`robot-scada-client` when a SCADA server provisions the terminal, or the
+terminal's own web UI when it runs standalone. The same file either way, so an
+app cannot tell which configured it.
+
+### Where the config comes from
+
+The app is served from `/<slug>/`, and the file sits one level up, so it reads
+`../config.json`:
+
+```
+/var/www/apps/config.json                 the file this app reads
+/var/www/apps/<slug>/ -> .versions/…      the app itself, a symlink to a version
+```
+
+Press **Save Settings** on the terminal's **Application** page and `setapp.sh`
+writes `/etc/robot/app.conf`, then calls `webapp-config config`, which writes
+`config.json` through `robot-scada-client`'s own writer. That is deliberate: a
+standalone terminal produces the same file, in the same shape, at the same
+path, as one a SCADA server provisions.
+
+What each field is set by:
+
+| `config.json` | Set on | From |
+|---|---|---|
+| `name` | Application page | Tag Name — the terminal's hostname |
+| `type` | Application page | Function — one of the app's `supports` |
+| `protocol` | Application page | Protocol |
+| `serverURL` | Application page | Server URL |
+| `transactionURL` | Application page | Transaction URL, **or the Server URL when left empty** |
+| `scale` | **Communications** page | the wsScale model, `TTYSCALE_MODEL` in `/etc/ttysocket/scale.conf` |
+| `deviceWebAppVersion` | — | the version being served right now |
+| `MAC`, `security`, `units`, `lowLimit`, `highLimit`, `signOn*`, `mqtt*` | — | a SCADA server only |
+
+Two of those are worth knowing about before copying this app.
+
+**An empty transaction URL means the server URL.** Most sites run one host, and
+the terminal's browser has always read a blank that way. The app is handed the
+resolved value, never an empty string, so it does not need the rule.
+
+**The scale model is not the Application page's to set.** It belongs to the
+bridge that reads the scale, on the Communications page. wsScale reads
+`config.json` *after* `scale.conf` and the config wins, so a value published
+here would silently override the page that owns it.
+
+Nothing rereads the file. A terminal that is re-provisioned rewrites
+`config.json` and the page picks it up on its next load — which is why
+`deviceWebAppVersion` is in there: an app that watches it can notice it is a
+version behind and reload itself.
 
 **Devices** arrive over websockets on the terminal, one port per kind:
 

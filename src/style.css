@@ -1,91 +1,146 @@
 /* A terminal is read standing up, at arm's length, sometimes with gloves on:
-   big text, big buttons. That is the whole of the styling. */
+   big text, big buttons.
+
+   And it never scrolls. The smallest panel in the family is 800x480 with a
+   76px browser toolbar on it, which leaves about 400px of height - so the app
+   is exactly one viewport tall, one screen at a time, and anything that does
+   not fit is a screen of its own rather than something below the fold. An
+   operator does not scroll a terminal; they press the thing they can see. */
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
 
 body {
-  margin: 0;
-  padding: 16px;
   background: #14171c;
   color: #f2f4f7;
   font-family: system-ui, sans-serif;
-  font-size: 18px;
+  font-size: clamp(15px, 2.2vh, 20px);
 }
 
-.app { max-width: 700px; margin: 0 auto; }
+.app {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: clamp(6px, 1.4vh, 14px) clamp(10px, 2vw, 22px);
+  gap: clamp(6px, 1.2vh, 12px);
+  box-sizing: border-box;
+}
 
+/* --- header: who this terminal is, and what it can hear ----------------- */
 header {
   display: flex;
-  justify-content: space-between;
   align-items: baseline;
-  flex-wrap: wrap;
+  gap: 12px;
   border-bottom: 2px solid #e8710a;
-  padding-bottom: 10px;
+  padding-bottom: clamp(4px, 0.8vh, 8px);
+  flex: none;
 }
-h1 { font-size: 22px; margin: 0; }
+h1 { font-size: clamp(16px, 2.6vh, 24px); margin: 0; }
 
-.lamps { font-size: 14px; color: #98a2b3; }
+.demo {
+  margin: 0;
+  flex: 1;
+  font-size: clamp(10px, 1.5vh, 13px);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #e8710a;
+}
+
+.lamps { display: flex; gap: 6px; }
 .lamp {
   display: inline-block;
   width: 10px; height: 10px;
   border-radius: 50%;
   background: #d64545;
-  margin: 0 4px 0 12px;
 }
 .lamp.on { background: #2e9e4f; }
 
+/* --- moving between screens --------------------------------------------- */
+nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.who {
+  flex: 1;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+nav button { padding: 0.4em 1em; font-size: clamp(14px, 2vh, 18px); }
+nav button.here {
+  background: #e8710a;
+  border-color: #e8710a;
+  color: #14171c;
+}
+
+/* --- the screen itself: one, filling what is left ----------------------- */
+main.one {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
 section {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(6px, 1.4vh, 14px);
   background: #1e232b;
   border: 1px solid #2c333d;
   border-radius: 8px;
-  padding: 16px;
-  margin-top: 16px;
+  padding: clamp(8px, 2vh, 20px);
+  overflow: auto;            /* only the enrolment list can ever need this */
 }
-h2 { font-size: 15px; text-transform: uppercase; margin: 0 0 8px; color: #98a2b3; }
 
-.big { font-size: 30px; font-weight: 700; margin: 0 0 14px; word-break: break-all; }
-
-button {
-  font: inherit;
+h2 {
+  margin: 0;
+  font-size: clamp(13px, 1.8vh, 16px);
   font-weight: 600;
-  padding: 12px 20px;
-  margin-right: 8px;
-  border: 0;
-  border-radius: 6px;
-  background: #e8710a;
-  color: #fff;
-}
-button:disabled { opacity: .4; }
-button.quiet { background: #39424f; }
-
-.ok { color: #2e9e4f; }
-.bad { color: #d64545; }
-.problem {
-  background: #3a2a12;
-  border: 1px solid #e8710a;
-  border-radius: 6px;
-  padding: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #98a2b3;
 }
 
-/* The banner. Loud on purpose - this app is a starting point, and it will be
-   installed on terminals that also run the real one. */
-.demo {
-  margin: 0 0 14px;
-  padding: 10px 14px;
+.big {
+  margin: 0;
+  font-size: clamp(24px, 6vh, 52px);
+  font-weight: 600;
+  line-height: 1.1;
+  word-break: break-word;
+}
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.enrol { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+
+button, select {
+  font: inherit;
+  font-size: clamp(15px, 2.2vh, 19px);
+  padding: 0.5em 1.1em;
+  border-radius: 6px;
+  border: 1px solid #3a4350;
   background: #e8710a;
   color: #14171c;
-  border-radius: 6px;
-  font-weight: 700;
-  font-size: 15px;
-  letter-spacing: .08em;
-  text-transform: uppercase;
-  text-align: center;
+  font-weight: 600;
+  cursor: pointer;
 }
+select { background: #262c35; color: #f2f4f7; border-color: #3a4350; font-weight: 400; }
+button.quiet { background: transparent; color: #f2f4f7; border-color: #3a4350; font-weight: 400; }
+button:disabled { opacity: 0.4; cursor: default; }
 
-/* Enrolling an unknown card. Set apart, because it only appears when something
-   has gone wrong and should not look like part of the normal screen. */
-.enrol { margin-top: 14px; padding-top: 14px; border-top: 1px solid #2c333d; }
-.enrol p { margin: 0 0 8px; color: #98a2b3; font-size: 15px; }
-.enrol select {
-  font: inherit; padding: 10px; margin-right: 8px;
-  border-radius: 6px; border: 1px solid #2c333d;
-  background: #14171c; color: #f2f4f7;
+/* --- the one line that says what just happened -------------------------- */
+.message {
+  flex: none;
+  margin: 0;
+  min-height: 1.4em;
+  font-size: clamp(13px, 1.9vh, 17px);
 }
+.ok  { color: #6bcb77; }
+.bad { color: #ff8a8a; }

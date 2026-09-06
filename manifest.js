@@ -18,7 +18,7 @@ const manifest = {
   name: 'Robot Demonstration Web Application',
   version: pkg.version,
   vendor: 'Radical Electronic Systems',
-  supports: ['TERMINAL', 'SCALE', 'SCANNER'],
+  supports: ['TERMINAL', 'SCALE', 'SCANNER', 'LABELPRINT'],
   built: new Date().toISOString().slice(0, 10),
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "device-webapp-template",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "A starting point for a terminal web app: card reader, barcode scanner and scale, and a test server to post to.",
