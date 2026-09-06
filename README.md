@@ -33,6 +33,49 @@ Open the app, press **Pretend a card**, then **Pretend a scan** and **Pretend a
 weight**. The server prints what it receives. `http://localhost:8099/` lists the
 cards it knows and what it has been told.
 
+## A scale, when there is no scale
+
+`tools/scale-emulator/` streams the frames a real indicator sends, so the scale
+screen has something to show on a bench with no weighbridge on it.
+
+```sh
+npm run scale                    # what tools/scale-emulator/scale.conf says
+npm run scale -- --ramp 0:25:0.5 # anything you add wins over the file
+```
+
+`scale.conf` holds the port, the protocol and the starting weight, because
+they are the same every time on a given bench:
+
+```sh
+PORT=/dev/ttyUSB0        # empty makes a pty instead - no hardware needed
+PROTOCOL=MICRO-A12E
+WEIGHT=0
+RAMP=                    # LOW:HIGH:STEP to make it climb on its own
+```
+
+A port that is not there is the usual way this fails, so the script says which
+ports the machine does have rather than passing on an errno.
+
+Run it in your own terminal: **type a weight, press enter, and that is what the
+scale reads.** That is the whole interface, and it is why this is worth having
+in front of an audience.
+
+It speaks the protocols wsScale decodes — `MICRO-A12E` (the default here),
+`RICHTER`, `XK3118T1`, `MASSAMATIC`, `RINSTRUM` — and `--kind G` sends gross
+instead of nett. Needs `pyserial` for a real port: `sudo apt install
+python3-serial`.
+
+**Where to plug it in.** The emulator writes; the terminal's `wsScale` reads.
+So the serial port you give it must be cabled to the port the terminal has its
+scale on — or, with a loopback plug on the terminal's own connector, run the
+emulator *on the terminal* against that same port and it comes straight back
+in. Both were used to bring up a T430: the second proves the software without
+proving the wiring.
+
+A copy: the original is in `linux-tty-ws-server`, under
+`test/scale-emulator/python`, where it is tested against the decoders it feeds.
+If they ever disagree, that one is right.
+
 ## Put it on a terminal
 
 ```sh
@@ -94,10 +137,11 @@ http://host/mount/               ->  http://host/mount/api/v1/transact/logon/
 ## The whole thing
 
 ```
-src/App.vue          the app - config, the three readers, the three posts
-src/style.css        big text, big buttons
+src/App.vue          the app - config, the three readers, the four posts
+src/style.css        big text, big buttons, one screen at a time
 manifest.js          what the bundle calls itself
 test-server/         a business system to post to
+tools/scale-emulator/  a scale, when there is no scale (scale.conf, scale.sh)
 ```
 
 `src/App.vue` is 150 lines including the screen. Read it top to bottom: it
