@@ -111,20 +111,41 @@ of which belongs in the first thing you read.
 
 ## How a terminal talks to this app
 
-**Configuration** arrives in `config.json`. The terminal writes it —
-`robot-scada-client` when a SCADA server provisions the terminal, or the
-terminal's own web UI when it runs standalone. The same file either way, so an
-app cannot tell which configured it.
+**Configuration** arrives in `/var/www/apps/config.json` on the terminal, which
+the app reads as `../config.json` — one level up from the directory it is
+served out of. The terminal writes it: `robot-scada-client` when a SCADA server
+provisions the terminal, or the terminal's own web UI when it runs standalone.
+The same file either way, so an app cannot tell which configured it.
 
 ### Where the config comes from
 
-The app is served from `/<slug>/`, and the file sits one level up, so it reads
-`../config.json`:
+On the terminal:
 
 ```
-/var/www/apps/config.json                 the file this app reads
-/var/www/apps/<slug>/ -> .versions/…      the app itself, a symlink to a version
+/var/www/apps/                            served by nginx on 127.0.0.1:8081
+├── config.json                           the file this app reads
+├── device-webapp-template -> .versions/device-webapp-template/1.0.1
+└── .versions/
+    └── device-webapp-template/
+        ├── 1.0.0/                        still here, and still selectable
+        └── 1.0.1/  index.html  assets/  manifest.json
 ```
+
+The app is served from `/<slug>/`, so `http://127.0.0.1:8081/device-webapp-template/`
+fetches `http://127.0.0.1:8081/config.json` — the same file for every app on
+the terminal, because a terminal is one thing however many apps it holds. That
+is also why the bundle must not contain a `config.json` of its own: it would
+sit one directory too deep, never be read, and look like it was.
+
+Two other files behind it, if you are chasing a value that looks wrong:
+
+```
+/etc/robot/app.conf                       what the Application page saved
+/etc/ttysocket/scale.conf                 what the Communications page saved
+```
+
+In development there is no terminal, so `npm run dev` reads `public/config.json`
+from this repo instead. `manifest.js` deletes it from `dist/` at bundle time.
 
 Press **Save Settings** on the terminal's **Application** page and `setapp.sh`
 writes `/etc/robot/app.conf`, then calls `webapp-config config`, which writes

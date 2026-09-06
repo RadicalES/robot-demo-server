@@ -12,9 +12,15 @@ import { ref, computed, watch, onMounted } from 'vue'
 
 const config = ref({ name: '', transactionURL: '', type: 'TERMINAL' })
 const connected = ref({ CARD: false, SCALE: false, SCAN: false })
+
+// Whether the last thing said to the server got through. Null until something
+// has been tried - an unlit lamp is not a claim either way.
+const online = ref(null)
 const operator = ref(null)
 const barcode = ref('')
-const onScale = ref(null)
+const onScale = ref(null)      // the reading itself, or null for nothing on the scale
+const scaleState = ref(null)   // what wsScale said about it: NORMAL, OVER, UNDER, UNSTABLE
+const scaleUnits = ref('kg')
 const message = ref('')
 const failed = ref(false)
 
@@ -55,8 +61,15 @@ const chosen = ref('')
 // The terminal writes config.json next to the app. We are served from /<app>/,
 // so it is one level up.
 async function loadConfig() {
-  const response = await fetch('../config.json', { cache: 'no-cache' })
-  config.value = await response.json()
+  try {
+    const response = await fetch('../config.json', { cache: 'no-cache' })
+    config.value = await response.json()
+  } catch {
+    // Without it the app knows neither its name nor where to post. Say so:
+    // this used to throw inside onMounted and leave a screen that looked
+    // finished and did nothing.
+    say('No config.json beside the app. This terminal has not been set up.', true)
+  }
 }
 
 // TRANSACT-API is at /api/v1/transact/ on whichever host the terminal was
@@ -69,21 +82,49 @@ function apiUrl(endpoint) {
   return `${base}/api/v1/transact/${endpoint}/`
 }
 
-async function get(endpoint) {
-  const response = await fetch(apiUrl(endpoint))
-  return response.json()
-}
+// Two different failures, told apart on purpose.
+//
+// A REFUSAL is the server answering: the card is unknown, the weight is out of
+// range. The operator can do something about it.
+//
+// UNREACHABLE is the server not answering at all - stopped, the wrong port, a
+// cable out. Nothing the operator does at the screen will help, and showing
+// them a refusal reads as "your card is wrong" when the truth is that nobody
+// asked. fetch() rejects for this, and it is the only failure that does.
+async function call(endpoint, options) {
+  let response
+  try {
+    response = await fetch(apiUrl(endpoint), options)
+  } catch {
+    online.value = false
+    throw Object.assign(new Error(`Cannot reach the server at ${config.value.transactionURL}`),
+                        { unreachable: true })
+  }
 
-async function post(endpoint, body) {
-  const response = await fetch(apiUrl(endpoint), {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ terminal: config.value.name, ...body }),
-  })
-  const answer = await response.json()
+  let answer
+  try {
+    answer = await response.json()
+  } catch {
+    // A reply that is not JSON is not this API - most often something else is
+    // listening on that port, which looks like the server working until you
+    // read what it said.
+    online.value = false
+    throw Object.assign(new Error(`${config.value.transactionURL} answered, but not with JSON - is that the transaction server?`),
+                        { unreachable: true })
+  }
+
+  online.value = true
   if (!response.ok) throw new Error(answer.message)   // a refusal says why
   return answer
 }
+
+const get = (endpoint) => call(endpoint)
+
+const post = (endpoint, body) => call(endpoint, {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ terminal: config.value.name, ...body }),
+})
 
 // One websocket per device. A device that is not fitted never connects, and
 // one that is unplugged comes back on its own.
@@ -98,14 +139,39 @@ function listen(kind, port) {
 }
 
 async function read(kind, text) {
+  // The scale is not a reader. wsScale decodes the indicator's protocol and
+  // sends a JSON reading - weight, units, and whether it has settled - because
+  // "11.5" on its own does not say whether the operator may act on it. The
+  // other two send the characters they read.
+  if (kind === 'SCALE') return readScale(text)
+
   // A reader may tag what it read - "[CARD]:8893..." - and says hello when its
   // port opens, which is not a card.
   const value = (/^\[[^\]]*\]:?\s*(.*)$/.exec(text) || [, text])[1]
   if (!value || /[\s<>]/.test(value)) return
 
-  if (kind === 'SCALE') return (onScale.value = Number(value))
   if (kind === 'CARD') return signOn(value)
   return scan(value)
+}
+
+// {"weight":11.000,"units":"kg","type":"N","status":"NORMAL","stable":true}
+//
+// status is NORMAL, OVER, UNDER or UNSTABLE; stable says the reading has
+// settled. A weight nobody may act on is still worth showing - an operator
+// watching a blank screen while the pallet swings does not know whether the
+// scale is broken or just moving.
+function readScale(text) {
+  let reading
+  try {
+    reading = JSON.parse(text)
+  } catch {
+    return   // wsScale says hello when the socket opens; that is not a reading
+  }
+  if (typeof reading.weight !== 'number') return
+
+  onScale.value = reading.weight
+  scaleUnits.value = reading.units || 'kg'
+  scaleState.value = reading.stable === false ? 'UNSTABLE' : (reading.status || 'NORMAL')
 }
 
 function say(text, isFailure = false) {
@@ -119,11 +185,21 @@ async function signOn(card) {
     unknownCard.value = ''
     say(`Signed on: ${operator.value.name}`)
   } catch (e) {
+    // Only the server refusing means the card is unknown. This used to treat
+    // every failure that way, so a stopped server told the operator their card
+    // was not known - and then the fetch for the list of people failed too,
+    // with nothing on the screen at all.
+    if (e.unreachable) return say(e.message, true)
+
     // The commonest thing that happens with a real card is that nobody knows
     // it. Offer to give it to somebody rather than just saying no.
-    unknownCard.value = card
-    people.value = (await get('people')).people
-    say(`Card ${card} is not known. Choose who it belongs to.`, true)
+    try {
+      people.value = (await get('people')).people
+      unknownCard.value = card
+      say(`Card ${card} is not known. Choose who it belongs to.`, true)
+    } catch (listFailed) {
+      say(listFailed.message, true)
+    }
   }
 }
 
@@ -151,8 +227,14 @@ async function scan(value) {
 // The scale sends a reading whenever there is weight on it. Which one counts
 // is a person's decision, so it is a button.
 async function record() {
+  // Refused here rather than by the server: a reading that is still moving, or
+  // over the indicator's range, is not a weight anybody should be recording,
+  // and the operator finds that out faster from the screen in front of them.
+  if (scaleState.value !== 'NORMAL') {
+    return say(`The scale is ${(scaleState.value || 'not reading').toLowerCase()} - wait for a steady weight.`, true)
+  }
   try {
-    say((await post('scale', { weight: onScale.value, units: 'kg' })).message)
+    say((await post('scale', { weight: onScale.value, units: scaleUnits.value })).message)
   } catch (e) {
     say(`Weight refused: ${e.message}`, true)
   }
@@ -193,10 +275,14 @@ onMounted(async () => {
            that looks like the production app is one somebody trusts with real
            work. -->
       <p class="demo">Robot Demonstration Web Application</p>
+      <!-- Named, not just coloured. A terminal has no pointer, so a tooltip is
+           a label nobody can read, and "which dot is the scale" is not
+           something to work out while the queue waits. -->
       <span class="lamps">
-        <i class="lamp" :class="{ on: connected.CARD }"></i>
-        <i class="lamp" :class="{ on: connected.SCAN }"></i>
-        <i class="lamp" :class="{ on: connected.SCALE }"></i>
+        <span class="lamp-item"><i class="lamp" :class="{ on: connected.CARD }"></i>card</span>
+        <span class="lamp-item"><i class="lamp" :class="{ on: connected.SCAN }"></i>scanner</span>
+        <span class="lamp-item"><i class="lamp" :class="{ on: connected.SCALE }"></i>scale</span>
+        <span class="lamp-item"><i class="lamp" :class="{ on: online === true, unknown: online === null }"></i>server</span>
       </span>
     </header>
 
@@ -248,10 +334,13 @@ onMounted(async () => {
 
         <section v-if="screen === 'scale'">
           <h2>Weight</h2>
-          <p class="big">{{ onScale === null ? 'Nothing on the scale' : onScale + ' kg' }}</p>
+          <p class="big weight">
+            {{ onScale === null ? 'Nothing on the scale' : onScale.toFixed(2) + ' ' + scaleUnits }}
+            <span v-if="scaleState && scaleState !== 'NORMAL'" class="state">{{ scaleState.toLowerCase() }}</span>
+          </p>
           <div class="actions">
-            <button :disabled="onScale === null" @click="record">Record this weight</button>
-            <button class="quiet" @click="onScale = 18.4">Pretend a weight</button>
+            <button :disabled="onScale === null || scaleState !== 'NORMAL'" @click="record">Record this weight</button>
+            <button class="quiet" @click="onScale = 18.4; scaleState = 'NORMAL'">Pretend a weight</button>
           </div>
         </section>
 

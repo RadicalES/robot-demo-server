@@ -222,6 +222,7 @@ app.get('/', (req, res) => {
       'POST /api/v1/transact/logoff/  {}',
       'POST /api/v1/transact/scan/    {barcode}',
       'POST /api/v1/transact/scale/   {weight, units, barcode}',
+      'POST /api/v1/transact/label/   {kind}',
       'GET  /api/v1/transact/captured/',
       '',
       'Known cards:',

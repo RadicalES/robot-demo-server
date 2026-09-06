@@ -1,7 +1,9 @@
 {
   "name": "Bench",
   "type": "TERMINAL",
-  "serverURL": "",
+  "protocol": "TRANSACT-API",
+  "serverURL": "http://localhost:8099/",
   "transactionURL": "http://localhost:8099/",
+  "scale": "RICHTER",
   "deviceWebAppVersion": "dev"
 }
