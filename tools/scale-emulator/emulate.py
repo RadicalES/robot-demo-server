@@ -8,6 +8,7 @@ cable and a second machine; this needs a terminal.
 
     ./emulate.py --protocol MICRO-A12E --weight 500.1
     ./emulate.py --protocol RICHTER --ramp 0:1200:5 --port /dev/ttyUSB0
+    py emulate.py --protocol MICRO-A12E --port COM3        (Windows)
 
 With no --port it opens a pty and prints its name, which is what the tests use
 and what lets two of these run at once for a terminal with two scales.
@@ -25,20 +26,27 @@ if the two ever disagree, that one is right.
 
 import argparse
 import os
-import pty
 import sys
-import termios
 import threading
 import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# A pty needs POSIX. Windows has neither module, and a demonstration laptop is
+# as likely to be Windows as not - so they are optional, and asking for a pty
+# there says so rather than failing at import.
+try:
+    import pty
+    import termios
+except ImportError:
+    pty = termios = None
+
 import scales
 
 
 class Emulator:
-    def __init__(self, protocol, fd, kind, units):
+    def __init__(self, protocol, write, kind, units):
         self.protocol = protocol
-        self.fd = fd
+        self.write = write
         self.kind = kind
         self.units = units
         self.weight = 0.0
@@ -48,9 +56,9 @@ class Emulator:
     def send_forever(self):
         while self.running:
             try:
-                os.write(self.fd, self.protocol.frame(self.weight, self.kind, self.units))
+                self.write(self.protocol.frame(self.weight, self.kind, self.units))
                 self.sent += 1
-            except OSError:
+            except Exception:
                 # The other end went away - a terminal restarting its service,
                 # usually. Keep going: a real scale does not stop streaming
                 # because nobody is listening, and neither should this.
@@ -76,7 +84,8 @@ def main():
     parser.add_argument("--protocol", default="MICRO-A12E",
                         help="which indicator to be: " +
                              ", ".join(p.name for p in scales.ALL))
-    parser.add_argument("--port", help="serial port to write to; a pty is made if omitted")
+    parser.add_argument("--port", help="serial port to write to (/dev/ttyUSB0, COM3); a pty is made if omitted")
+    parser.add_argument("--baud", type=int, default=9600, help="baud rate for --port (default 9600)")
     parser.add_argument("--weight", type=float, default=0.0, help="the weight to report")
     parser.add_argument("--kind", default=scales.NETT, choices=[scales.GROSS, scales.NETT],
                         help="G gross or N net")
@@ -92,16 +101,48 @@ def main():
     protocol = scales.by_name(args.protocol)
 
     if args.port:
-        fd = os.open(args.port, os.O_RDWR | os.O_NOCTTY)
-        where = args.port
+        # pyserial, because it is the only one of these that sets a baud rate
+        # and the only one that knows what COM3 is. A raw os.open works on
+        # Linux only because the port is usually already at 9600.
+        try:
+            import serial
+        except ImportError:
+            sys.exit("pyserial is needed to write to a serial port:\n"
+                     "  Linux    sudo apt install python3-serial\n"
+                     "  Windows  py -m pip install pyserial")
+        try:
+            port = serial.Serial(args.port, args.baud, timeout=1)
+        except Exception as e:
+            # The port name is the thing most often wrong, and it is different
+            # on every machine - COM3 here, /dev/ttyUSB0 there. Say what this
+            # one has rather than leaving somebody guessing in front of a room.
+            print(f"Cannot open {args.port}: {e}\n", file=sys.stderr)
+            try:
+                from serial.tools import list_ports
+                found = list(list_ports.comports())
+            except Exception:
+                found = []
+            if found:
+                print("Ports on this machine:", file=sys.stderr)
+                for candidate in found:
+                    print(f"  {candidate.device:12} {candidate.description}", file=sys.stderr)
+            else:
+                print("No serial ports found on this machine at all.", file=sys.stderr)
+            sys.exit(1)
+        write = port.write
+        where = f"{args.port} at {args.baud}"
     else:
+        if pty is None:
+            sys.exit("A pty needs Linux or macOS. On Windows, give it a port:\n"
+                     "  --port COM3")
         fd, slave = pty.openpty()
         where = os.ttyname(slave)
         # Raw, or the pty echoes and mangles what a scale would send.
         attrs = termios.tcgetattr(fd)
         termios.tcsetattr(fd, termios.TCSANOW, attrs)
+        write = lambda data: os.write(fd, data)
 
-    emulator = Emulator(protocol, fd, args.kind, args.units)
+    emulator = Emulator(protocol, write, args.kind, args.units)
     emulator.weight = args.weight
 
     print(f"{protocol.name} on {where}, every {protocol.interval}s", flush=True)

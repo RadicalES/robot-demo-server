@@ -53,8 +53,19 @@ WEIGHT=0
 RAMP=                    # LOW:HIGH:STEP to make it climb on its own
 ```
 
-A port that is not there is the usual way this fails, so the script says which
-ports the machine does have rather than passing on an errno.
+A port that is not there is the usual way this fails, so it lists the ports the
+machine does have — by name and description — rather than passing on an errno.
+
+**On Windows** it is the same command. `npm run scale` finds python (`py -3`,
+then `python`), and the port in `scale.conf` is a COM port:
+
+```sh
+PORT=COM3
+```
+
+It needs pyserial there: `py -m pip install pyserial`. Leaving `PORT` empty
+makes a pty, which is Linux and macOS only — Windows has no such thing, and the
+emulator says so rather than failing at import.
 
 Run it in your own terminal: **type a weight, press enter, and that is what the
 scale reads.** That is the whole interface, and it is why this is worth having
@@ -141,7 +152,7 @@ src/App.vue          the app - config, the three readers, the four posts
 src/style.css        big text, big buttons, one screen at a time
 manifest.js          what the bundle calls itself
 test-server/         a business system to post to
-tools/scale-emulator/  a scale, when there is no scale (scale.conf, scale.sh)
+tools/scale-emulator/  a scale, when there is no scale (scale.conf, scale.mjs)
 ```
 
 `src/App.vue` is 150 lines including the screen. Read it top to bottom: it
