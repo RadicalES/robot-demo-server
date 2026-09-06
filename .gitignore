@@ -8,3 +8,7 @@ test-server/cards.json
 # Not tracked: this is a demonstration installed fresh, and a lockfile
 # committed here pins versions nobody chose on purpose.
 package-lock.json
+
+# Python leaves these beside the scale emulator.
+__pycache__/
+*.pyc
