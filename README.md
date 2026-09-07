@@ -67,6 +67,15 @@ It needs pyserial there: `py -m pip install pyserial`. Leaving `PORT` empty
 makes a pty, which is Linux and macOS only — Windows has no such thing, and the
 emulator says so rather than failing at import.
 
+`scale.bat` in the repository root does the same from a double-click: it reads
+`scale.conf`, finds python, and stops with a message you can read rather than a
+window that closes. Or skip all of it and run the emulator directly, which is
+the same program:
+
+```
+py tools\scale-emulator\emulate.py --protocol MICRO-A12E --port COM3
+```
+
 Run it in your own terminal: **type a weight, press enter, and that is what the
 scale reads.** That is the whole interface, and it is why this is worth having
 in front of an audience.
