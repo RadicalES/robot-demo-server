@@ -108,8 +108,8 @@ def main():
             import serial
         except ImportError:
             sys.exit("pyserial is needed to write to a serial port:\n"
-                     "  Linux    sudo apt install python3-serial\n"
-                     "  Windows  py -m pip install pyserial")
+                     "  py -m pip install -r tools/scale-emulator/requirements.txt\n"
+                     "  (or, on Debian: sudo apt install python3-serial)")
         try:
             port = serial.Serial(args.port, args.baud, timeout=1)
         except Exception as e:

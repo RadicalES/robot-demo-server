@@ -1,0 +1,9 @@
+# What the scale emulator needs, beyond python itself.
+#
+#   Windows   py -m pip install -r requirements.txt
+#   Linux     sudo apt install python3-serial      (or pip, in a venv)
+#
+# Only needed to write to a real serial port. With no --port the emulator makes
+# a pty and needs nothing from this file.
+
+pyserial>=3.5

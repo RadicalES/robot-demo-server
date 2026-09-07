@@ -12,7 +12,8 @@ rem      scale.bat --port COM4
 rem      scale.bat --ramp 0:25:0.5
 rem
 rem  Python only - no Node - because a demonstration laptop is likelier to have
-rem  python than a build toolchain. It needs pyserial:  py -m pip install pyserial
+rem  python than a build toolchain. It needs pyserial:
+rem      py -m pip install -r tools\scale-emulator\requirements.txt
 rem
 rem  While it runs, type a weight and press enter to change what the scale
 rem  reads. That is the whole interface.
@@ -79,7 +80,7 @@ if not defined PY python --version >nul 2>&1 && set "PY=python"
 if not defined PY (
     echo No python found.
     echo Install it from python.org, tick "Add to PATH", then:
-    echo     py -m pip install pyserial
+    echo     py -m pip install -r tools\scale-emulator\requirements.txt
     goto :fail
 )
 

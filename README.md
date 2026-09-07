@@ -63,7 +63,7 @@ then `python`), and the port in `scale.conf` is a COM port:
 PORT=COM3
 ```
 
-It needs pyserial there: `py -m pip install pyserial`. Leaving `PORT` empty
+It needs pyserial there: `py -m pip install -r tools/scale-emulator/requirements.txt`. Leaving `PORT` empty
 makes a pty, which is Linux and macOS only — Windows has no such thing, and the
 emulator says so rather than failing at import.
 
@@ -82,8 +82,8 @@ in front of an audience.
 
 It speaks the protocols wsScale decodes — `MICRO-A12E` (the default here),
 `RICHTER`, `XK3118T1`, `MASSAMATIC`, `RINSTRUM` — and `--kind G` sends gross
-instead of nett. Needs `pyserial` for a real port: `sudo apt install
-python3-serial`.
+instead of nett. Needs `pyserial` for a real port &mdash; `tools/scale-emulator/requirements.txt`,
+or `sudo apt install python3-serial`.
 
 **Where to plug it in.** The emulator writes; the terminal's `wsScale` reads.
 So the serial port you give it must be cabled to the port the terminal has its
