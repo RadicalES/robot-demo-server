@@ -1,0 +1,3 @@
+# A batch file is checked out on Windows and cmd is not reliable about LF -
+# labels and goto in particular. Keep CRLF whatever the machine's settings say.
+*.bat text eol=crlf
