@@ -72,11 +72,22 @@ if defined RAMP   (set "ARGS=!ARGS! --ramp %RAMP%") else (if defined WEIGHT set 
 if defined KIND   set "ARGS=!ARGS! --kind %KIND%"
 if defined UNITS  set "ARGS=!ARGS! --units %UNITS%"
 
-rem py is the Windows python launcher and is what an installer puts there;
-rem python is the fallback for a machine where only that is on the PATH.
+rem Which python, in the order that respects what somebody has set up.
+rem
+rem An activated virtual environment comes first: VIRTUAL_ENV is what activate
+rem sets, and pyserial is very often installed there rather than system-wide.
+rem "py -3" is the Windows launcher and it ignores a venv entirely - it was
+rem tried first here, which is exactly how a machine with a working venv gets
+rem told pyserial is not installed.
+rem
+rem Then a venv sitting in this folder even if nobody activated it, then
+rem whatever "python" is on the PATH, and the launcher last.
 set "PY="
-py -3 --version >nul 2>&1 && set "PY=py -3"
+if defined VIRTUAL_ENV if exist "%VIRTUAL_ENV%\Scripts\python.exe" set "PY=%VIRTUAL_ENV%\Scripts\python.exe"
+if not defined PY if exist ".venv\Scripts\python.exe" set "PY=.venv\Scripts\python.exe"
+if not defined PY if exist "venv\Scripts\python.exe"  set "PY=venv\Scripts\python.exe"
 if not defined PY python --version >nul 2>&1 && set "PY=python"
+if not defined PY py -3 --version >nul 2>&1 && set "PY=py -3"
 if not defined PY (
     echo No python found.
     echo Install it from python.org, tick "Add to PATH", then:
@@ -84,7 +95,7 @@ if not defined PY (
     goto :fail
 )
 
-echo scale: %PROTOCOL% on %PORT%
+echo scale: %PROTOCOL% on %PORT%   [%PY%]
 %PY% "%EMULATOR%" %ARGS% %*
 if errorlevel 1 goto :fail
 endlocal

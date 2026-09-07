@@ -35,12 +35,26 @@ else if (settings.WEIGHT) args.push('--weight', settings.WEIGHT)
 if (settings.KIND) args.push('--kind', settings.KIND)
 if (settings.UNITS) args.push('--units', settings.UNITS)
 
-// Windows installs python as "py", Linux as "python3", and a machine may have
-// both with only one of them being the one that has pyserial. Take the first
-// that answers.
-const candidates = process.platform === 'win32'
-  ? [['py', ['-3']], ['python', []], ['python3', []]]
-  : [['python3', []], ['python', []]]
+// Which python, in the order that respects what somebody has set up.
+//
+// An activated virtual environment first - VIRTUAL_ENV is what activate sets,
+// and pyserial is as often installed there as system-wide. Then a venv sitting
+// in the repository even if nobody activated it. Then the PATH, and Windows'
+// "py" launcher last: it ignores a venv entirely, so preferring it is how a
+// machine with a working environment gets told pyserial is missing.
+const win = process.platform === 'win32'
+const binDir = win ? 'Scripts' : 'bin'
+const exe = win ? 'python.exe' : 'python3'
+
+const venvs = []
+if (process.env.VIRTUAL_ENV) venvs.push(join(process.env.VIRTUAL_ENV, binDir, exe))
+venvs.push(join(here, '..', '..', '.venv', binDir, exe))
+venvs.push(join(here, '..', '..', 'venv', binDir, exe))
+
+const candidates = venvs.filter((p) => existsSync(p)).map((p) => [p, []])
+candidates.push(...(win
+  ? [['python', []], ['py', ['-3']]]
+  : [['python3', []], ['python', []]]))
 
 let python = null
 for (const [command, flags] of candidates) {
@@ -56,7 +70,8 @@ if (!python) {
 const [command, flags] = python
 const all = [...flags, join(here, 'emulate.py'), ...args, ...process.argv.slice(2)]
 console.log(`scale: ${settings.PROTOCOL || 'MICRO-A12E'} on ${settings.PORT || 'a new pty'}` +
-            (settings.RAMP ? `, ramping ${settings.RAMP}` : ''))
+            (settings.RAMP ? `, ramping ${settings.RAMP}` : '') +
+            `   [${command}]`)
 
 // inherit, so typing a weight and pressing enter reaches the emulator.
 const child = spawn(command, all, { stdio: 'inherit' })

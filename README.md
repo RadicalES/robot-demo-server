@@ -63,7 +63,12 @@ then `python`), and the port in `scale.conf` is a COM port:
 PORT=COM3
 ```
 
-It needs pyserial there: `py -m pip install -r tools/scale-emulator/requirements.txt`. Leaving `PORT` empty
+It needs pyserial: `py -m pip install -r tools/scale-emulator/requirements.txt`.
+A virtual environment is honoured — an activated one first, then `.venv/` or
+`venv/` in this repository, then the PATH. Windows' `py` launcher is tried
+last, because it ignores a venv and preferring it is how a machine with a
+working environment gets told pyserial is missing. Both launchers print which
+python they used. Leaving `PORT` empty
 makes a pty, which is Linux and macOS only — Windows has no such thing, and the
 emulator says so rather than failing at import.
 
