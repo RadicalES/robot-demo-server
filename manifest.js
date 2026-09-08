@@ -19,6 +19,14 @@ const manifest = {
   version: pkg.version,
   vendor: 'Radical Electronic Systems',
   supports: ['TERMINAL', 'SCALE', 'SCANNER', 'LABELPRINT'],
+  // What the app needs of the device, as opposed to what it does. It is one
+  // viewport tall by design, so the smallest panel in the family - 720 wide on
+  // a T440, 480 high on a T430 - is the floor rather than a hope.
+  requires: {
+    screen: { minWidth: 720, minHeight: 480 },
+    browser: '>=3.6.7',
+    client: '>=1.5.6',
+  },
   built: new Date().toISOString().slice(0, 10),
 }
 
