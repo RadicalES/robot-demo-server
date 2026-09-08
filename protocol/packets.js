@@ -82,8 +82,6 @@ module.exports = {
       // the last known version alone rather than erasing it.
       server.recordVersions(robot, {
         firmware: packet.firmware,
-        deviceWebApp: packet.deviceWebApp,
-        rootfs: packet.rootfs,
       })
 
       return { MAC: packet.MAC, status: 'ENABLED', session: server.newSession(), ...robot.setup }
@@ -167,18 +165,6 @@ module.exports = {
     reply: ({ MAC, barcode }, { server }) => {
       server.log(`label   ${MAC}  ${barcode}`)
       return ok({ MAC, LCD1: 'Label printed' })
-    },
-  },
-
-  publishRootfsUpdate: {
-    summary:
-      'The terminal answering a release install: STARTED, or REFUSED with a ' +
-      'reason. A courtesy - what settles which release a terminal is on is ' +
-      'the rootfs field in its next requestSetup, after the reboot.',
-    responseName: 'responseStatus',
-    reply: ({ MAC, manifest, status, reason }, { server }) => {
-      server.log(`rootfs  ${MAC}  ${manifest} ${status}${reason ? '  ' + reason : ''}`)
-      return ok({ MAC })
     },
   },
 

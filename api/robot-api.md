@@ -161,20 +161,13 @@ The Robot will continuously ping the server to make sure the network is function
     "requestPing" : {
         "MAC" : "AA:BB:CC:00:11:22",
         "session" : "0123456789abcdef",
-        "firmware" : "ITPC200-COCPU-1.3-7d2ada55",
-        "deviceWebApp" : "1.3.46",
-        "rootfs" : "T430-R5H"
+        "firmware" : "ITPC200-COCPU-1.3-7d2ada55"
     }
 }
 ```
 
-The same version fields as `requestSetup`, so a terminal that installs
-something without rebooting is recorded without waiting for one. The server
-writes only on a change, so repeating them costs nothing.
-
-`deviceWebApp` does double duty here: it is recorded, and it is what the server
-compares against the bundle it holds. Absent reads as "anything is newer",
-which is what a terminal with no app installed wants.
+`firmware` is recorded, and the server writes only on a change, so repeating it
+costs nothing.
 #### Pong Response
 ```JSON
 "responsePong" : {
@@ -232,8 +225,6 @@ On boot the server must provide important information to the Robot. Various sett
         "platform" : "linux",
         "model" : "ROBOT-T430",
         "firmware" : "ITPC200-COCPU-1.3-7d2ada55",
-        "deviceWebApp" : "1.3.46",
-        "rootfs" : "T430-R5H",
         "controlURL" : "http://192.168.0.50:8080/control",
         "VNC" : "192.168.0.50:5900"
     }
@@ -245,18 +236,9 @@ sent; a Linux terminal also says what it is and what it is running.
 
 #### What a terminal reports
 
-Three things version independently, and each is reported under its own name:
-
 | Field | Means |
 |---|---|
-| `firmware` | The firmware of a processor in front of the peripherals. An ITPC-200 has one presenting its card readers; a T430 or T440 has none and sends nothing. |
-| `deviceWebApp` | The web app the terminal is serving. |
-| `rootfs` | The image the filesystem was installed from. |
-
-They were one field until 2026-09-03, `firmware`, which carried the rootfs
-release - so a device that really did have firmware had nowhere to report it,
-and a terminal running a co-processor build that read no cards looked identical
-to a working one.
+| `firmware` | The firmware version of a processor in front of the peripherals, where the terminal has one. |
 
 **A value the terminal cannot determine is left out entirely.** Absent means
 "not reported" and leaves the last known version alone. An empty string would
@@ -342,81 +324,6 @@ Operator identification is handled in various manners. The following are support
 A transaction command will always start with the word publish. In some cases a request is initiated before a publish is issued.
 
 <p>
-
-### Device Web App
-
-A Linux terminal serves a web application to itself, and the server decides
-which. The terminal reports what it has installed on every ping; the server
-answers only when it holds something else.
-
-#### Server offers an app
-```JSON
-{
-    "responseDeviceWebApp" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "status" : "SUCCESS",
-        "message" : "New device web app available",
-        "deviceWebApp" : {
-            "slug" : "device-webapp",
-            "version" : "1.3.46",
-            "download_url" : "http://server:8080/media/firmware/robot-device-webapp-1.3.46.tar.gz",
-            "sha256_checksum" : "1dcf1e79...",
-            "size" : 142321,
-            "is_latest" : true
-        }
-    }
-}
-```
-
-The terminal downloads it, checks the digest, unpacks it beside the running
-copy and repoints the name it serves - so the swap needs no reboot and takes
-effect on the next page load. `slug` is the name it is served under.
-
-An app installed at the terminal itself, from its own web UI, is left alone:
-the terminal records that it owns that app and declines offers for it until
-that is handed back. Otherwise a terminal handed an app in front of somebody
-was back on the server's within the minute.
-
-### Rootfs Update
-
-A web app is a directory swapped under a symlink and needs no reboot. The
-rootfs is the operating system the terminal is running, installed over itself,
-and it does reboot - so it is never offered on a ping. The server asks a named
-terminal for it, by pushing to that terminal's `controlURL`.
-
-#### Server asks for a release
-```JSON
-{
-    "requestRootfsUpdate" : {
-        "manifest" : "ITPC200-R3F",
-        "password" : "the overlay password",
-        "force" : false
-    }
-}
-```
-
-A release is a signed manifest published on the CDN naming everything the
-terminal should be running, so naming it is enough. **Rolling back is the same
-instruction with an older name** - and going backwards needs `force`, because a
-manifest lists the releases it may be applied over and one built last year
-cannot list one built this week.
-
-#### Robot answers
-```JSON
-{
-    "publishRootfsUpdate" : {
-        "MAC" : "AA:BB:CC:00:11:22",
-        "manifest" : "ITPC200-R3F",
-        "status" : "STARTED",
-        "reason" : ""
-    }
-}
-```
-
-`REFUSED` carries the reason: no such manifest name, no password, an install
-already running, or the release already installed. This is a courtesy only -
-what settles which release a terminal is on is the `rootfs` field in its next
-`requestSetup`, after the reboot.
 
 ### List of publish commands
 

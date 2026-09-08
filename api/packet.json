@@ -18,9 +18,7 @@
     "requestPing": {
         "MAC": "AA:BB:CC:00:11:22",
         "session": "0123456789abcdef",
-        "firmware": "ITPC200-COCPU-1.3-7d2ada55",
-        "deviceWebApp": "1.3.46",
-        "rootfs": "T430-R5H"
+        "firmware": "ITPC200-COCPU-1.3-7d2ada55"
     },
     "responsePong": {
         "MAC": "AA:BB:CC:00:11:22"
@@ -125,8 +123,6 @@
         "platform": "linux",
         "model": "ROBOT-T430",
         "firmware": "ITPC200-COCPU-1.3-7d2ada55",
-        "deviceWebApp": "1.3.46",
-        "rootfs": "T430-R5H",
         "clientURL": "http://robot-ip/control.cgi",
         "controlURL": "http://robot-ip:8080/control",
         "VNC": "192.168.0.50:5900"
@@ -204,32 +200,5 @@
         "subObject": {
             "subProperyName": "subPropertyValue"
         }
-    },
-    "responseDeviceWebApp": {
-        "MAC": "AA:BB:CC:00:11:22",
-        "status": "SUCCESS",
-        "message": "New device web app available",
-        "deviceWebApp": {
-            "uuid": "5f627f2c-0328-4c14-a186-8243e5a858f9",
-            "name": "robot-device-webapp-1.3.46.tar.gz",
-            "slug": "device-webapp",
-            "version": "1.3.46",
-            "size": 142321,
-            "download_url": "http://server:8080/media/firmware/robot-device-webapp-1.3.46.tar.gz",
-            "md5_checksum": "8293baae0e99999275cdc6410d95fe55",
-            "sha256_checksum": "1dcf1e797ad478957a97f11d00da9082c241dc64776d3935ec613b285528309d",
-            "is_latest": true
-        }
-    },
-    "requestRootfsUpdate": {
-        "manifest": "ITPC200-R3F",
-        "password": "the overlay password",
-        "force": false
-    },
-    "publishRootfsUpdate": {
-        "MAC": "AA:BB:CC:00:11:22",
-        "manifest": "ITPC200-R3F",
-        "status": "STARTED/REFUSED",
-        "reason": "already on ITPC200-R3F"
     }
 }
