@@ -12,3 +12,8 @@ package-lock.json
 # Python leaves these beside the scale emulator.
 __pycache__/
 *.pyc
+
+# Internal: stages a bundle into the package repository and publishes it to
+# the CDN. This repository is what a customer copies to write their own app -
+# our publishing route is not part of that.
+stage2cdn.sh
