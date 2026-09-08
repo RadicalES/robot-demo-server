@@ -1,13 +1,18 @@
 #!/bin/bash
 #
-# publish2cdn.sh - build this web app and put it on the CDN.
+# stage2cdn.sh - build this web app, stage it in the package repository, and
+#                publish it to the CDN.
 #
 # One command, because the alternative is three in two repositories and a
 # search through the notes for which they were:
 #
-#   ./publish2cdn.sh              build, stage, show what would upload, ask
-#   ./publish2cdn.sh --yes        no question - for a script calling this
-#   ./publish2cdn.sh --stage-only build and stage, upload nothing
+#   ./stage2cdn.sh              build, stage, show what would upload, ask
+#   ./stage2cdn.sh --yes        no question - for a script calling this
+#   ./stage2cdn.sh --stage-only build and stage, upload nothing
+#
+# Staging is the part that always happens: the bundle is copied into the
+# package repository and the catalogue rebuilt. Uploading is the part it asks
+# about, because that is the step somebody else sees.
 #
 # What it does:
 #   npm run bundle                     -> dist-bundle.tar.gz
